@@ -41,8 +41,9 @@ export default defineConfig(({ mode }) => {
       target: 'es2020',
       cssCodeSplit: true,
       sourcemap: false,
-      // کاهش حجم با minification پیشرفته
-      minify: 'esbuild',
+      // استفاده از minify پیش‌فرض Vite 8 (rolldown)
+      // esbuild در Vite 8 deprecate شده و نیاز به نصب جداگانه داره
+      minify: true,
       // افزایش حد هشدار برای chunk‌های بزرگ
       chunkSizeWarningLimit: 1000,
       rollupOptions: {

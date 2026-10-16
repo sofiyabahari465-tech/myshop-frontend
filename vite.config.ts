@@ -42,16 +42,7 @@ export default defineConfig(({ mode }) => {
       cssCodeSplit: true,
       sourcemap: false,
       // کاهش حجم با minification پیشرفته
-      minify: 'terser',
-      terserOptions: {
-        compress: {
-          drop_console: mode === 'production',
-          drop_debugger: mode === 'production',
-        },
-        format: {
-          comments: false,
-        },
-      },
+      minify: 'esbuild',
       // افزایش حد هشدار برای chunk‌های بزرگ
       chunkSizeWarningLimit: 1000,
       rollupOptions: {

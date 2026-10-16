@@ -50,12 +50,33 @@ export default defineConfig(({ mode }) => {
           entryFileNames: 'assets/[name].[hash].js',
           chunkFileNames: 'assets/[name].[hash].js',
           assetFileNames: 'assets/[name].[hash].[ext]',
-          // تقسیم کد برای بارگذاری سریع‌تر
-          manualChunks: {
-            // کتابخانه‌های React به chunk جداگانه
-            'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-            // کتابخانه‌های دیگر
-            'utils-vendor': ['axios', 'xlsx', 'lucide-react'],
+          // تقسیم کد با تابع (Rollup API جدید)
+          manualChunks: (moduleId: string) => {
+            // فقط node_modules ها رو split کن
+            if (!moduleId.includes('node_modules')) {
+              return undefined;
+            }
+
+            // کتابخانه‌های React
+            if (
+              moduleId.includes('react') ||
+              moduleId.includes('react-dom') ||
+              moduleId.includes('react-router')
+            ) {
+              return 'react-vendor';
+            }
+
+            // کتابخانه‌های utils
+            if (
+              moduleId.includes('axios') ||
+              moduleId.includes('xlsx') ||
+              moduleId.includes('lucide-react')
+            ) {
+              return 'utils-vendor';
+            }
+
+            // بقیه node_modules
+            return 'vendor';
           },
         },
       },

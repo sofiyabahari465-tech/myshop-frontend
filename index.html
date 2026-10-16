@@ -2,36 +2,136 @@
 <html lang="fa" dir="rtl">
   <head>
     <meta charset="UTF-8" />
-    
-    
+
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
-    
-    
+
     <meta name="description" content="سامانه مدیریت نمایندگی و انبار - projcetshercat" />
     <meta name="keywords" content="نمایندگی, انبار, مدیریت فروش, قطعات خودرو, projcetshercat" />
     <meta name="author" content="شرکت شما" />
     <meta name="robots" content="index, follow" />
-    
+
     <meta property="og:type" content="website" />
     <meta property="og:title" content="projcetshercat - سامانه مدیریت نمایندگی" />
     <meta property="og:description" content="سامانه مدیریت نمایندگی و انبار" />
-   
+
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="projcetshercat - سامانه مدیریت نمایندگی" />
     <meta name="twitter:description" content="سامانه مدیریت نمایندگی و انبار" />
-    
 
     <meta name="theme-color" content="#1e40af" />
+    <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    
+
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>projcetshercat - سامانه مدیریت نمایندگی و انبار</title>
+
+    <!-- فونت Vazirmatn از CDN با preload برای سرعت بیشتر -->
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <link
+      rel="preload"
+      as="style"
+      href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css"
+    />
+
+    <title>پنل مدیریت نمایندگی</title>
+
+    <!-- استایل اولیه برای نمایش loader قبل از بارگذاری React -->
+    <style>
+      /* لودر اولیه - قبل از بارگذاری React */
+      #initial-loader {
+        position: fixed;
+        inset: 0;
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 20px;
+        z-index: 9999;
+        transition: opacity 0.5s ease;
+      }
+
+      #initial-loader.fade-out {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .initial-loader__spinner {
+        width: 64px;
+        height: 64px;
+        position: relative;
+      }
+
+      .initial-loader__spinner::before,
+      .initial-loader__spinner::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        border: 4px solid transparent;
+      }
+
+      .initial-loader__spinner::before {
+        border-top-color: #06b6d4;
+        border-right-color: #06b6d4;
+        animation: initial-loader-spin 1s linear infinite;
+      }
+
+      .initial-loader__spinner::after {
+        border-bottom-color: #a855f7;
+        border-left-color: #a855f7;
+        animation: initial-loader-spin 1.5s linear reverse infinite;
+        inset: 8px;
+      }
+
+      @keyframes initial-loader-spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+
+      .initial-loader__text {
+        color: #e2e8f0;
+        font-family: 'Vazirmatn', system-ui, sans-serif;
+        font-size: 16px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        animation: initial-loader-pulse 1.5s ease-in-out infinite;
+      }
+
+      .initial-loader__subtext {
+        color: #64748b;
+        font-family: 'Vazirmatn', system-ui, sans-serif;
+        font-size: 13px;
+        font-weight: 500;
+      }
+
+      @keyframes initial-loader-pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.6; }
+      }
+
+      /* فونت پیش‌فرض برای قبل از بارگذاری فونت اصلی */
+      body {
+        margin: 0;
+        font-family: 'Vazirmatn', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Tahoma, sans-serif;
+      }
+    </style>
   </head>
   <body>
+    <!-- لودر اولیه - قبل از بارگذاری React -->
+    <div id="initial-loader">
+      <div class="initial-loader__spinner"></div>
+      <div class="initial-loader__text">در حال بارگذاری...</div>
+      <div class="initial-loader__subtext">لطفاً چند ثانیه صبر کنید</div>
+    </div>
+
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

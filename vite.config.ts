@@ -37,11 +37,35 @@ export default defineConfig(({ mode }) => {
     },
 
     build: {
+      // کاهش حجم خروجی
+      target: 'es2020',
+      cssCodeSplit: true,
+      sourcemap: false,
+      // کاهش حجم با minification پیشرفته
+      minify: 'terser',
+      terserOptions: {
+        compress: {
+          drop_console: mode === 'production',
+          drop_debugger: mode === 'production',
+        },
+        format: {
+          comments: false,
+        },
+      },
+      // افزایش حد هشدار برای chunk‌های بزرگ
+      chunkSizeWarningLimit: 1000,
       rollupOptions: {
         output: {
           entryFileNames: 'assets/[name].[hash].js',
           chunkFileNames: 'assets/[name].[hash].js',
           assetFileNames: 'assets/[name].[hash].[ext]',
+          // تقسیم کد برای بارگذاری سریع‌تر
+          manualChunks: {
+            // کتابخانه‌های React به chunk جداگانه
+            'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+            // کتابخانه‌های دیگر
+            'utils-vendor': ['axios', 'xlsx', 'lucide-react'],
+          },
         },
       },
     },

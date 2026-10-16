@@ -8,13 +8,14 @@ import {
   Routes,
 } from 'react-router-dom';
 import Loading from './componets/Loading';
+import InstallPrompt from './componets/InstallPrompt';
 import './index.css';
 
 // Lazy loading برای کاهش حجم اولیه و افزایش سرعت بارگذاری
 const App = lazy(() => import('./App'));
 const Login = lazy(() => import('./componets/Login'));
 
-// کامپوننت برای حذف لودر اولیه (که توی index.html بود)
+// کامپوننت برای حذف لودر اولیه و register کردن service worker
 const InitialLoaderManager: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
@@ -37,6 +38,22 @@ const InitialLoaderManager: React.FC<{ children: React.ReactNode }> = ({
     }
   }, []);
 
+  useEffect(() => {
+    // ثبت Service Worker برای PWA
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker
+          .register('/sw.js')
+          .then((registration) => {
+            console.log('SW registered:', registration.scope);
+          })
+          .catch((error) => {
+            console.log('SW registration failed:', error);
+          });
+      });
+    }
+  }, []);
+
   return <>{children}</>;
 };
 
@@ -56,6 +73,9 @@ ReactDOM.createRoot(
   <React.StrictMode>
     <InitialLoaderManager>
       <BrowserRouter>
+        {/* بنر نصب PWA */}
+        <InstallPrompt />
+
         <Suspense fallback={<SuspenseFallback />}>
           <Routes>
             <Route path="/login" element={<Login />} />

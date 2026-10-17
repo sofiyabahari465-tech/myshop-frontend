@@ -1883,7 +1883,7 @@ const RepresentativeWarehouseDashboard: React.FC<Props> = ({
 
                 <div className="rounded-xl bg-blue-50 p-3 dark:bg-blue-900/20">
                   <p className="text-blue-600 dark:text-blue-300">
-                    تعداد ذخیره‌شده این کالا
+                    مجموع
                   </p>
 
                   <p className="mt-2 font-black text-gray-800 dark:text-gray-100">

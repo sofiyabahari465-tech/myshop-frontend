@@ -615,39 +615,104 @@ const SalesReportsAdminTable = ({
   };
 
   const handlePrint = () => {
-    if (typeof window !== 'undefined' && window.innerWidth < 768) {
-      const element = document.querySelector('.admin-print-only') as HTMLElement;
+    if (
+      typeof window !== 'undefined' &&
+      (window.innerWidth < 768 ||
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent,
+        ))
+    ) {
+      const element = document.querySelector(
+        '.admin-print-only',
+      ) as HTMLElement;
       if (element) {
-        const printWindow = window.open('', '_blank', 'width=800,height=900');
-        if (!printWindow) {
-          alert('لطفاً popup blocker را غیرفعال کنید');
+        // استفاده از iframe برای چاپ موبایل (مطمئن‌ترین روش)
+        const iframe = document.createElement('iframe');
+        iframe.style.position = 'fixed';
+        iframe.style.right = '0';
+        iframe.style.bottom = '0';
+        iframe.style.width = '0';
+        iframe.style.height = '0';
+        iframe.style.border = '0';
+        iframe.style.overflow = 'hidden';
+        iframe.setAttribute('aria-hidden', 'true');
+        iframe.title = 'چاپ گزارش فروش';
+
+        document.body.appendChild(iframe);
+
+        const doc = iframe.contentWindow?.document || iframe.contentDocument;
+        if (!doc) {
+          document.body.removeChild(iframe);
           return;
         }
-        printWindow.document.write(`
-          <!DOCTYPE html>
-          <html lang="fa" dir="rtl">
-            <head>
-              <meta charset="UTF-8" />
-              <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-              <title>چاپ گزارش فروش</title>
-              <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" />
-              <style>
-                * { margin: 0; padding: 0; box-sizing: border-box; }
-                body { font-family: 'Vazirmatn', Tahoma, Arial, sans-serif; direction: rtl; padding: 20px; background: white; color: #111827; }
-                table { width: 100%; border-collapse: collapse; margin: 10px 0; table-layout: fixed; }
-                th, td { border: 1px solid #6b7280; padding: 6px 8px; text-align: right; font-size: 11px; word-wrap: break-word; word-break: break-word; }
-                th { background: #f3f4f6; font-weight: bold; }
-                img { max-width: 100%; height: auto; }
-                h1, h2, h3 { margin: 10px 0; }
-                @media print { @page { size: A4 portrait; margin: 10mm; } body { padding: 0; } }
-              </style>
-            </head>
-            <body>${element.innerHTML}</body>
-          </html>
-        `);
-        printWindow.document.close();
-        printWindow.focus();
-        setTimeout(() => { printWindow.print(); }, 500);
+
+        doc.open();
+        doc.write(`<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>چاپ گزارش فروش</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" />
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+html, body { font-family: 'Vazirmatn', Tahoma, Arial, sans-serif !important; direction: rtl; padding: 15px; background: #ffffff !important; color: #111827; width: 100%; max-width: 100%; }
+table { width: 100% !important; max-width: 100% !important; border-collapse: collapse; margin: 10px 0; table-layout: fixed; }
+th, td { border: 1px solid #6b7280; padding: 6px 8px; text-align: right; font-size: 11px; word-wrap: break-word; word-break: break-word; overflow-wrap: break-word; }
+th { background: #f3f4f6 !important; font-weight: bold; color: #111827; }
+img { max-width: 100%; height: auto; }
+h1, h2, h3, h4 { margin: 8px 0; color: #111827; }
+p { margin: 4px 0; }
+div { max-width: 100%; }
+@media print {
+  @page { size: A4 portrait; margin: 8mm; }
+  html, body { padding: 0 !important; margin: 0 !important; width: 100% !important; max-width: 100% !important; }
+  table { page-break-inside: auto; }
+  tr { page-break-inside: avoid; page-break-after: auto; }
+  thead { display: table-header-group; }
+}
+</style>
+</head>
+<body>${element.innerHTML}</body>
+</html>`);
+        doc.close();
+
+        const triggerPrint = () => {
+          try {
+            iframe.contentWindow?.focus();
+            setTimeout(() => {
+              try {
+                iframe.contentWindow?.print();
+              } catch (e) {
+                console.error('خطا در چاپ:', e);
+              }
+              setTimeout(() => {
+                if (iframe.parentNode) {
+                  document.body.removeChild(iframe);
+                }
+              }, 1000);
+            }, 300);
+          } catch (e) {
+            console.error('خطا در چاپ:', e);
+            if (iframe.parentNode) {
+              document.body.removeChild(iframe);
+            }
+          }
+        };
+
+        if (iframe.contentWindow?.document?.readyState === 'complete') {
+          triggerPrint();
+        } else {
+          iframe.onload = triggerPrint;
+          setTimeout(() => {
+            if (
+              iframe.parentNode &&
+              iframe.contentWindow?.document?.readyState === 'complete'
+            ) {
+              triggerPrint();
+            }
+          }, 2000);
+        }
         return;
       }
     }

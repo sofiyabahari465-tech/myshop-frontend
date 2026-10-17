@@ -6,6 +6,9 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
 
   return {
+    // مسیر پایه برای GitHub Pages (نام ریپو)
+    base: '/myshop-panel/',
+
     plugins: [react(), tailwindcss()],
 
     server: {
@@ -37,28 +40,21 @@ export default defineConfig(({ mode }) => {
     },
 
     build: {
-      // کاهش حجم خروجی
       target: 'es2020',
       cssCodeSplit: true,
       sourcemap: false,
-      // استفاده از minify پیش‌فرض Vite 8 (rolldown)
-      // esbuild در Vite 8 deprecate شده و نیاز به نصب جداگانه داره
-      minify: true,
-      // افزایش حد هشدار برای chunk‌های بزرگ
+      minify: 'esbuild',
       chunkSizeWarningLimit: 1000,
       rollupOptions: {
         output: {
           entryFileNames: 'assets/[name].[hash].js',
           chunkFileNames: 'assets/[name].[hash].js',
           assetFileNames: 'assets/[name].[hash].[ext]',
-          // تقسیم کد با تابع (Rollup API جدید)
           manualChunks: (moduleId: string) => {
-            // فقط node_modules ها رو split کن
             if (!moduleId.includes('node_modules')) {
               return undefined;
             }
 
-            // کتابخانه‌های React
             if (
               moduleId.includes('react') ||
               moduleId.includes('react-dom') ||
@@ -67,7 +63,6 @@ export default defineConfig(({ mode }) => {
               return 'react-vendor';
             }
 
-            // کتابخانه‌های utils
             if (
               moduleId.includes('axios') ||
               moduleId.includes('xlsx') ||
@@ -76,7 +71,6 @@ export default defineConfig(({ mode }) => {
               return 'utils-vendor';
             }
 
-            // بقیه node_modules
             return 'vendor';
           },
         },

@@ -233,9 +233,96 @@ ${innerHTML}
   };
 
   const printContent = (contentId: string, title = 'چاپ') => {
-    const element = document.getElementById(contentId);
+    // اول با id می‌گردیم
+    let element = document.getElementById(contentId) as HTMLElement | null;
+
+    // اگه پیدا نشد، با className می‌گردیم
     if (!element) {
-      console.error('محتوای چاپ پیدا نشد:', contentId);
+      element = document.querySelector(
+        `.${contentId}`,
+      ) as HTMLElement | null;
+    }
+
+    // اگه پیدا نشد، با data-print attribute می‌گردیم
+    if (!element) {
+      element = document.querySelector(
+        `[data-print="${contentId}"]`,
+      ) as HTMLElement | null;
+    }
+
+    // اگه هیچ‌کدوم پیدا نشد، کل صفحه رو چاپ می‌کنیم
+    if (!element) {
+      console.warn(
+        'محتوای چاپ پیدا نشد با:',
+        contentId,
+        '- کل صفحه چاپ میشه',
+      );
+      // fallback: چاپ کل صفحه
+      const oldIframe = document.getElementById('print-iframe');
+      if (oldIframe && oldIframe.parentNode) {
+        document.body.removeChild(oldIframe);
+      }
+
+      const iframe = document.createElement('iframe');
+      iframe.id = 'print-iframe';
+      iframe.style.position = 'fixed';
+      iframe.style.right = '0';
+      iframe.style.bottom = '0';
+      iframe.style.width = '0';
+      iframe.style.height = '0';
+      iframe.style.border = '0';
+      iframe.style.overflow = 'hidden';
+      iframe.setAttribute('aria-hidden', 'true');
+      iframe.title = title;
+
+      document.body.appendChild(iframe);
+
+      const doc = iframe.contentWindow?.document || iframe.contentDocument;
+      if (!doc) {
+        window.print();
+        return;
+      }
+
+      doc.open();
+      doc.write(buildPrintHTML(document.body.innerHTML, title));
+      doc.close();
+
+      const triggerPrint = () => {
+        try {
+          iframe.contentWindow?.focus();
+          setTimeout(() => {
+            try {
+              iframe.contentWindow?.print();
+            } catch (e) {
+              console.error('خطا در چاپ:', e);
+            }
+            setTimeout(() => {
+              if (iframe.parentNode) {
+                document.body.removeChild(iframe);
+              }
+            }, 1000);
+          }, 300);
+        } catch (e) {
+          console.error('خطا در چاپ:', e);
+          if (iframe.parentNode) {
+            document.body.removeChild(iframe);
+          }
+        }
+      };
+
+      if (iframe.contentWindow?.document?.readyState === 'complete') {
+        triggerPrint();
+      } else {
+        iframe.onload = triggerPrint;
+        setTimeout(() => {
+          if (
+            iframe.parentNode &&
+            iframe.contentWindow?.document?.readyState === 'complete'
+          ) {
+            triggerPrint();
+          }
+        }, 2000);
+      }
       return;
     }
 

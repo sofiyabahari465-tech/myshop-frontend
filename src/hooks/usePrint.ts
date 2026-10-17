@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 
 /**
- * هوک مدیریت چاپ - نسخه ریشه‌ای برای موبایل
+ * هوک مدیریت چاپ - نسخه ریشه‌ای
  *
- * مشکل: در موبایل، وقتی print() صدا زده میشه، محتوا هنوز رندر نشده
- *        و PDF خالی ذخیره میشه.
+ * مشکل: هم در موبایل و هم در دسکتاپ، وقتی print() صدا زده میشه،
+ *        CSS چاپ با visibility:hidden محتوا رو مخفی می‌کنه و PDF خالی ذخیره میشه.
  *
- * راه‌حل: استفاده از iframe مخفی + onload event
+ * راه‌حل: استفاده از iframe مخفی برای هم دستگاه‌ها
  * - محتوا توی iframe نوشته میشه
  * - صبر می‌کنیم تا iframe کامل لود بشه (onload)
  * - بعد از onload، چاپ صدا زده میشه
@@ -55,6 +55,14 @@ export function usePrint() {
     color: #111827;
     width: 100%;
     max-width: 100%;
+    visibility: visible !important;
+    opacity: 1 !important;
+    display: block !important;
+  }
+  /* همه عناصر قابل مشاهده باشند */
+  body * {
+    visibility: visible !important;
+    opacity: 1 !important;
   }
   table {
     width: 100% !important;
@@ -62,6 +70,15 @@ export function usePrint() {
     border-collapse: collapse;
     margin: 10px 0;
     table-layout: fixed;
+    display: table !important;
+  }
+  thead, tbody, tfoot {
+    display: table-row-group !important;
+  }
+  tr {
+    display: table-row !important;
+    page-break-inside: avoid;
+    page-break-after: auto;
   }
   th, td {
     border: 1px solid #6b7280;
@@ -71,6 +88,8 @@ export function usePrint() {
     word-wrap: break-word;
     word-break: break-word;
     overflow-wrap: break-word;
+    display: table-cell !important;
+    visibility: visible !important;
   }
   th {
     background: #f3f4f6 !important;
@@ -81,15 +100,21 @@ export function usePrint() {
     max-width: 100%;
     height: auto;
   }
-  h1, h2, h3, h4 {
+  h1, h2, h3, h4, h5, h6 {
     margin: 8px 0;
+    color: #111827;
+    display: block !important;
+  }
+  p, span, div {
+    display: block !important;
     color: #111827;
   }
   p {
     margin: 4px 0;
   }
-  div {
-    max-width: 100%;
+  /* اطمینان از نمایش همه چیز */
+  .no-print, .no-print * {
+    display: none !important;
   }
   @media print {
     @page {
@@ -101,6 +126,12 @@ export function usePrint() {
       margin: 0 !important;
       width: 100% !important;
       max-width: 100% !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+    }
+    body * {
+      visibility: visible !important;
+      opacity: 1 !important;
     }
     table {
       page-break-inside: auto;
@@ -122,8 +153,15 @@ ${innerHTML}
   };
 
   const printViaIframe = (innerHTML: string, title: string) => {
+    // حذف iframe قبلی اگه هست
+    const oldIframe = document.getElementById('print-iframe');
+    if (oldIframe && oldIframe.parentNode) {
+      document.body.removeChild(oldIframe);
+    }
+
     // ساخت iframe مخفی
     const iframe = document.createElement('iframe');
+    iframe.id = 'print-iframe';
     iframe.style.position = 'fixed';
     iframe.style.right = '0';
     iframe.style.bottom = '0';
@@ -139,7 +177,9 @@ ${innerHTML}
     const doc = iframe.contentWindow?.document || iframe.contentDocument;
     if (!doc) {
       console.error('نتوانستم به iframe دسترسی پیدا کنم');
-      document.body.removeChild(iframe);
+      if (iframe.parentNode) {
+        document.body.removeChild(iframe);
+      }
       return;
     }
 
@@ -201,34 +241,13 @@ ${innerHTML}
 
     const innerHTML = element.innerHTML;
 
-    // در موبایل: استفاده از iframe (مطمئن‌ترین روش)
-    if (isMobile) {
-      printViaIframe(innerHTML, title);
-      return;
-    }
-
-    // در دسکتاپ: window.print معمولی
-    window.print();
+    // برای همه دستگاه‌ها از iframe استفاده می‌کنیم (مطمئن‌ترین روش)
+    printViaIframe(innerHTML, title);
   };
 
   // متد عمومی برای چاپ مستقیم HTML
   const printHTML = (innerHTML: string, title = 'چاپ') => {
-    if (isMobile) {
-      printViaIframe(innerHTML, title);
-      return;
-    }
-    // در دسکتاپ: باز کردن تب جدید با محتوا
-    const printWindow = window.open('', '_blank');
-    if (!printWindow) {
-      alert('لطفاً popup blocker را غیرفعال کنید');
-      return;
-    }
-    printWindow.document.write(buildPrintHTML(innerHTML, title));
-    printWindow.document.close();
-    printWindow.focus();
-    setTimeout(() => {
-      printWindow.print();
-    }, 500);
+    printViaIframe(innerHTML, title);
   };
 
   return { printContent, printHTML, isMobile };

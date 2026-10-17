@@ -132,113 +132,14 @@ button {
 /* ============================ */
 /* استایل‌های چاپ - بهبود موبایل */
 /* ============================ */
+/* استایل‌های چاپ - حذف شد چون از iframe استفاده می‌کنیم */
+/* تنظیمات چاپ توی فایل src/hooks/usePrint.ts قرار داره */
+/* ============================ */
 
+/* فقط مخفی کردن دکمه‌های no-print */
 @media print {
-  @page {
-    size: A4 portrait;
-    margin: 10mm;
-  }
-
-  html,
-  body {
-    margin: 0 !important;
-    padding: 0 !important;
-    background: #ffffff !important;
-    direction: rtl !important;
-    font-family: 'Vazirmatn', Tahoma, Arial, sans-serif !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    /* حذف overflow:hidden که باعث خروج از صفحه میشه */
-    overflow: visible !important;
-    /* حذف position absolute که مشکل ایجاد می‌کنه */
-    position: static !important;
-  }
-
-  /* پنهان کردن تمام عناصر به جز چاپ */
-  body * {
-    visibility: hidden !important;
-    position: static !important;
-  }
-
-  /* فقط بخش چاپ نمایش داده شود */
-  .admin-print-only,
-  .admin-print-only *,
-  .print-only,
-  .print-only *,
-  .inventory-print-only,
-  .inventory-print-only *,
-  [class*='print-root'],
-  [class*='print-root'] *,
-  #print-root,
-  #print-root * {
-    visibility: visible !important;
-    position: static !important;
-  }
-
-  .admin-print-only,
-  .print-only,
-  .inventory-print-only,
-  [class*='print-root'],
-  #print-root {
-    display: block !important;
-    position: static !important;
-    /* حذف position absolute که باعث خروج میشه */
-    top: auto !important;
-    right: auto !important;
-    left: auto !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    color: #111827 !important;
-    background: #ffffff !important;
-  }
-
   .no-print {
     display: none !important;
-  }
-
-  /* جدول‌های چاپ */
-  table {
-    width: 100% !important;
-    max-width: 100% !important;
-    table-layout: fixed !important;
-    border-collapse: collapse !important;
-    overflow: visible !important;
-    /* اطمینان از نمایش کامل در صفحه چاپ */
-    page-break-inside: auto !important;
-  }
-
-  tr {
-    page-break-inside: avoid !important;
-    page-break-after: auto !important;
-  }
-
-  thead {
-    display: table-header-group !important;
-  }
-
-  tfoot {
-    display: table-footer-group !important;
-  }
-
-  /* برای موبایل: اندازه فونت کوچک‌تر */
-  @media (max-width: 768px) {
-    body {
-      font-size: 10px !important;
-    }
-
-    table {
-      font-size: 9px !important;
-    }
-
-    th,
-    td {
-      padding: 3px 5px !important;
-      word-wrap: break-word !important;
-      word-break: break-word !important;
-      overflow-wrap: break-word !important;
-    }
   }
 }
 

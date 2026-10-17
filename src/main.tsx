@@ -2,7 +2,7 @@ import './utils/axiosInterceptor';
 import React, { Suspense, lazy, useEffect, useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import {
-  BrowserRouter,
+  HashRouter,
   Navigate,
   Route,
   Routes,
@@ -43,7 +43,7 @@ const InitialLoaderManager: React.FC<{ children: React.ReactNode }> = ({
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker
-          .register('/sw.js')
+          .register('./sw.js')
           .then((registration) => {
             console.log('SW registered:', registration.scope);
           })
@@ -72,7 +72,7 @@ ReactDOM.createRoot(
 ).render(
   <React.StrictMode>
     <InitialLoaderManager>
-      <BrowserRouter>
+      <HashRouter>
         {/* بنر نصب PWA */}
         <InstallPrompt />
 
@@ -87,7 +87,7 @@ ReactDOM.createRoot(
             />
           </Routes>
         </Suspense>
-      </BrowserRouter>
+      </HashRouter>
     </InitialLoaderManager>
   </React.StrictMode>,
 );

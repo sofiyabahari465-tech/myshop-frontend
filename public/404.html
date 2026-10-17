@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="refresh" content="0; url=./index.html" />
+  <title>پنل مدیریت</title>
+  <script>
+    // Redirect to index.html for SPA routing
+    window.location.href = './index.html';
+  </script>
+</head>
+<body>
+  <div style="display: flex; justify-content: center; align-items: center; height: 100vh; flex-direction: column; font-family: Tahoma, Arial, sans-serif; background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%); color: white;">
+    <div style="width: 50px; height: 50px; border: 4px solid #06b6d4; border-top: 4px solid transparent; border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px;"></div>
+    <h1 style="font-size: 1.5rem; margin: 0;">در حال بارگذاری پنل...</h1>
+    <p style="font-size: 0.9rem; color: #94a3b8; margin-top: 10px;">لطفاً چند ثانیه صبر کنید</p>
+  </div>
+  <style>
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  </style>
+</body>
+</html>

@@ -1795,6 +1795,35 @@ const Shipments: React.FC = () => {
                 </div>
               )}
 
+              {/* مجموع کل ارسال بار */}
+              {validRows.length > 0 && (
+                <div className="rounded-2xl bg-gradient-to-l from-emerald-50 via-green-50 to-teal-50 p-4 dark:from-emerald-950/30 dark:via-green-950/30 dark:to-teal-950/30">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white">
+                        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="text-xs font-bold text-gray-500 dark:text-gray-400">
+                          مجموع کل ارسال بار
+                        </p>
+                        <p className="text-xs text-gray-400 dark:text-gray-500">
+                          {formatNumber(validRows.length)} قلم · {formatNumber(validRows.reduce((sum, r) => sum + r.quantity, 0))} عدد کالا
+                        </p>
+                      </div>
+                    </div>
+                    <div className="text-left">
+                      <p className="text-lg font-black text-transparent bg-clip-text bg-gradient-to-l from-emerald-600 to-teal-600 dark:from-emerald-400 dark:to-teal-400 sm:text-xl">
+                        {formatNumber(validRows.reduce((sum, r) => sum + r.quantity * r.unitPrice, 0))}
+                      </p>
+                      <p className="text-xs font-bold text-gray-500 dark:text-gray-400">تومان</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               <div className="flex flex-col-reverse gap-2 border-t border-gray-200 pt-4 dark:border-gray-700 sm:flex-row sm:justify-end">
                 <button
                   type="button"

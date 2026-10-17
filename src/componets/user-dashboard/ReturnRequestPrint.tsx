@@ -181,35 +181,18 @@ const ReturnRequestPrint = ({
 
 
   useEffect(() => {
-    const handleAfterPrint = () => {
-      onClose();
-    };
-
-
-    window.addEventListener(
-      'afterprint',
-      handleAfterPrint,
-    );
-
-
+    // حذف auto-close بعد از چاپ چون با iframe تداخل داره
+    // و باعث میشه مودال سریع بسته بشه
     const previousOverflow =
       document.body.style.overflow;
 
-
     document.body.style.overflow = 'hidden';
 
-
     return () => {
-      window.removeEventListener(
-        'afterprint',
-        handleAfterPrint,
-      );
-
-
       document.body.style.overflow =
         previousOverflow;
     };
-  }, [onClose]);
+  }, []);
 
 
   if (typeof document === 'undefined') {

@@ -146,9 +146,9 @@ const STATUS_STEPS: Array<{
 
 const COLUMN_ALIASES = {
   name: [
-    'نام محصول',
+    'عنوان',
      'عنوان',
-    'نام کالا',
+    'عنوان',
     'نام',
     'کالا',
     'محصول',
@@ -181,7 +181,7 @@ const COLUMN_ALIASES = {
     'Count',
   ],
   price: [
-    'قیمت واحد',
+    'قیمت',
     'قیمت',
     'بهای واحد',
     'unitPrice',
@@ -409,7 +409,7 @@ const parseExcelFile = async (
       COLUMN_ALIASES.name,
     )
   ) {
-    missingColumns.push('نام محصول');
+    missingColumns.push('عنوان');
   }
 
   if (
@@ -464,7 +464,7 @@ const parseExcelFile = async (
     let error = '';
 
     if (!productName) {
-      error = 'نام کالا خالی است.';
+      error = 'عنوان خالی است.';
     } else if (
       !Number.isSafeInteger(quantity) ||
       quantity <= 0
@@ -476,7 +476,7 @@ const parseExcelFile = async (
       unitPrice < 0
     ) {
       error =
-        'قیمت واحد باید عدد صحیح و نامنفی باشد.';
+        'قیمت باید عدد صحیح و نامنفی باشد.';
     }
 
     return {
@@ -1216,6 +1216,35 @@ const Shipments: React.FC = () => {
         </select>
       </section>
 
+      {/* باکس مجموع کل بارها */}
+      {filteredShipments.length > 0 && (
+        <div className="rounded-2xl bg-gradient-to-l from-cyan-50 via-blue-50 to-purple-50 p-4 dark:from-cyan-950/30 dark:via-blue-950/30 dark:to-purple-950/30">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500 to-purple-600 text-white shadow-lg">
+                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <div>
+                <p className="text-xs font-bold text-gray-500 dark:text-gray-400">
+                  مجموع کل بارها
+                </p>
+                <p className="text-xs text-gray-400 dark:text-gray-500">
+                  {formatNumber(filteredShipments.length)} حواله · {formatNumber(filteredShipments.reduce((sum, s) => sum + (s.totalItems ?? s.items?.reduce((a, i) => a + i.quantity, 0) ?? 0), 0))} عدد کالا
+                </p>
+              </div>
+            </div>
+            <div className="text-left">
+              <p className="text-lg font-black text-transparent bg-clip-text bg-gradient-to-l from-cyan-600 to-purple-600 dark:from-cyan-400 dark:to-purple-400 sm:text-2xl">
+                {formatNumber(filteredShipments.reduce((sum, s) => sum + (s.totalValue ?? s.items?.reduce((a, i) => a + (i.totalPrice ?? (i.quantity || 0) * (i.unitPrice || 0)), 0) ?? 0), 0))}
+              </p>
+              <p className="text-xs font-bold text-gray-500 dark:text-gray-400">تومان</p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {filteredShipments.length === 0 ? (
         <div className="rounded-2xl border-2 border-dashed border-blue-200 bg-blue-50 p-10 text-center">
           <Package className="mx-auto mb-3 h-12 w-12 text-blue-300" />
@@ -1587,7 +1616,7 @@ const Shipments: React.FC = () => {
                   </span>
 
                   <span className="text-xs text-gray-500">
-                    ستون‌های ضروری: نام محصول و تعداد — اگر فایل انتخاب نکنید، بار با یک آیتم پیش‌فرض ثبت می‌شود
+                    ستون‌های ضروری: عنوان و تعداد — اگر فایل انتخاب نکنید، بار با یک آیتم پیش‌فرض ثبت می‌شود
                   </span>
 
                   <input
@@ -1672,14 +1701,14 @@ const Shipments: React.FC = () => {
                     <thead className="sticky top-0 bg-gray-100 dark:bg-gray-800 dark:text-white">
                       <tr>
                         <th className="p-3">ردیف</th>
-                        <th className="p-3">محصول</th>
+                        <th className="p-3">عنوان</th>
                         <th className="p-3">برند</th>
                         <th className="p-3">
                           دسته‌بندی
                         </th>
                         <th className="p-3">تعداد</th>
                         <th className="p-3">
-                          قیمت واحد
+                          قیمت
                         </th>
                         <th className="p-3">وضعیت</th>
                       </tr>
@@ -1843,14 +1872,14 @@ const Shipments: React.FC = () => {
                 <table className="w-full min-w-[650px] text-right text-sm">
                   <thead className="sticky top-0 bg-gray-100 dark:bg-gray-800 dark:text-white">
                     <tr>
-                      <th className="p-3">محصول</th>
+                      <th className="p-3">عنوان</th>
                       <th className="p-3">برند</th>
                       <th className="p-3">
                         دسته‌بندی
                       </th>
                       <th className="p-3">تعداد</th>
                       <th className="p-3">
-                        قیمت واحد
+                        قیمت
                       </th>
                       <th className="p-3">
                         مبلغ

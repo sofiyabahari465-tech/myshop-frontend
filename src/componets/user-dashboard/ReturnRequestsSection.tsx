@@ -1293,7 +1293,7 @@ const ReturnRequestsSection = ({
 
             <label className="block">
               <span className="text-sm font-black text-gray-700 dark:text-gray-200">
-                قیمت واحد کالا
+                قیمت کالا
               </span>
 
 
@@ -1447,7 +1447,7 @@ const ReturnRequestsSection = ({
 
 
                             <p className="mt-2 text-xs font-black text-emerald-600 dark:text-emerald-400">
-                              قیمت واحد:{' '}
+                              قیمت:{' '}
                               {toPersianNumber(
                                 item.price,
                               )}{' '}

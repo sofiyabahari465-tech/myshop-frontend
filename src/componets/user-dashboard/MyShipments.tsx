@@ -339,6 +339,35 @@ const MyShipments: React.FC<Props> = ({
             </div>
           </div>
 
+          {/* باکس مجموع کل بارهای من */}
+          {sortedShipments.length > 0 && (
+            <div className="rounded-2xl bg-gradient-to-l from-cyan-50 via-blue-50 to-purple-50 p-4 dark:from-cyan-950/30 dark:via-blue-950/30 dark:to-purple-950/30">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500 to-purple-600 text-white shadow-lg">
+                    <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-gray-500 dark:text-gray-400">
+                      مجموع بارهای من
+                    </p>
+                    <p className="text-xs text-gray-400 dark:text-gray-500">
+                      {formatNumber(sortedShipments.length)} حواله · {formatNumber(sortedShipments.reduce((sum, s) => sum + (s.totalItems ?? s.items?.reduce((a, i) => a + (i.quantity || 0), 0) ?? 0), 0))} عدد کالا
+                    </p>
+                  </div>
+                </div>
+                <div className="text-left">
+                  <p className="text-lg font-black text-transparent bg-clip-text bg-gradient-to-l from-cyan-600 to-purple-600 dark:from-cyan-400 dark:to-purple-400 sm:text-2xl">
+                    {formatNumber(sortedShipments.reduce((sum, s) => sum + (s.totalValue ?? s.items?.reduce((a, i) => a + (i.totalPrice ?? (i.quantity || 0) * (i.unitPrice || 0)), 0) ?? 0), 0))}
+                  </p>
+                  <p className="text-xs font-bold text-gray-500 dark:text-gray-400">تومان</p>
+                </div>
+              </div>
+            </div>
+          )}
+
           {sortedShipments.length === 0 ? (
             <div className="rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50 px-4 py-12 text-center dark:border-gray-700 dark:bg-gray-800/40">
               <Package className="mx-auto mb-3 h-12 w-12 text-gray-300 dark:text-gray-600" />
@@ -629,7 +658,7 @@ const MyShipments: React.FC<Props> = ({
                                         تعداد
                                       </th>
                                       <th className="p-3">
-                                        قیمت واحد
+                                        قیمت
                                       </th>
                                     </tr>
                                   </thead>

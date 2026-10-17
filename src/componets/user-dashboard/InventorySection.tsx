@@ -625,7 +625,7 @@ const InventorySection = ({
                   onChange={(event) =>
                     setSearch(event.target.value)
                   }
-                  placeholder="جست‌وجو بر اساس نام کالا، برند یا دسته‌بندی..."
+                  placeholder="جست‌وجو بر اساس عنوان، برند یا دسته‌بندی..."
                   className="min-h-11 w-full rounded-xl border border-slate-200 bg-white py-2 pl-3 pr-10 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-slate-400 focus:ring-4 focus:ring-slate-100 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 dark:focus:ring-slate-800"
                 />
               </div>

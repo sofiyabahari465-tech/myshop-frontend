@@ -1012,7 +1012,7 @@ const PrintContent = ({
         <thead>
           <tr>
             <th>ردیف</th>
-            <th>نام کالا</th>
+            <th>عنوان</th>
             <th>تعداد</th>
             <th>قیمت</th>
             <th>مبلغ کل</th>

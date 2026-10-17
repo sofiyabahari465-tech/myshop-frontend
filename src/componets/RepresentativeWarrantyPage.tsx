@@ -4,6 +4,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import MyWarranties from './user-dashboard/MyWarranties';
 import {
   AlertCircle,
   CalendarDays,
@@ -961,6 +962,11 @@ const RepresentativeWarrantyPage: React.FC = () => {
           </div>
         </div>
       </form>
+
+      {/* لیست گارانتی‌های ثبت‌شده توسط این نماینده */}
+      <div className="mt-6">
+        <MyWarranties />
+      </div>
     </section>
   );
 };

@@ -18,7 +18,7 @@ const UserProfileSection = () => {
   const inventoryItems: DashboardInventoryItem[] = [
     {
       id: '1',
-      title: 'نام کالا',
+      title: 'عنوان',
       quantity: 10,
       unitPrice: 1500000,
       totalPrice: 15000000,

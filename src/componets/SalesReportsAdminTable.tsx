@@ -1502,7 +1502,7 @@ const SalesReportsAdminTable = ({
                             </th>
 
                             <th className="px-5 py-4 font-black">
-                              نام کالا
+                              عنوان
                             </th>
 
                             <th className="px-5 py-4 font-black">
@@ -1510,7 +1510,7 @@ const SalesReportsAdminTable = ({
                             </th>
 
                             <th className="px-5 py-4 font-black">
-                              قیمت واحد
+                              قیمت
                             </th>
 
                             <th className="px-5 py-4 font-black">

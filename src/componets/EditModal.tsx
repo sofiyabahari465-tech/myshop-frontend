@@ -148,7 +148,7 @@ const EditModal: React.FC<Props> = ({
             <div>
               <label className="mb-2 flex items-center gap-2 text-xs font-bold text-cyan-400 sm:text-sm">
                 <Tag className="h-4 w-4" />
-                نام محصول
+                عنوان
               </label>
 
               <input

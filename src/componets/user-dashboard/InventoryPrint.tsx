@@ -1219,11 +1219,11 @@ const InventoryPrint = ({
             <thead>
               <tr>
                 <th style={{ width: '5%' }}>ردیف</th>
-                <th style={{ width: '25%' }}>نام کالا</th>
+                <th style={{ width: '25%' }}>عنوان</th>
                 <th style={{ width: '15%' }}>برند</th>
                 <th style={{ width: '15%' }}>دسته‌بندی</th>
                 <th style={{ width: '10%' }}>موجودی</th>
-                <th style={{ width: '15%' }}>قیمت واحد</th>
+                <th style={{ width: '15%' }}>قیمت</th>
                 <th style={{ width: '15%' }}>ارزش کل</th>
               </tr>
             </thead>

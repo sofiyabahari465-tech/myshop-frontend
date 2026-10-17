@@ -430,7 +430,7 @@ const SalesAnnouncement = ({
               <thead className="bg-gray-50 text-xs text-gray-500 dark:bg-gray-800 dark:text-gray-400">
                 <tr>
                   <th className="px-4 py-4 font-black">
-                    نام کالا
+                    عنوان
                   </th>
 
                   <th className="px-4 py-4 font-black">
@@ -438,7 +438,7 @@ const SalesAnnouncement = ({
                   </th>
 
                   <th className="px-4 py-4 font-black">
-                    قیمت واحد
+                    قیمت
                   </th>
 
                   <th className="px-4 py-4 font-black">

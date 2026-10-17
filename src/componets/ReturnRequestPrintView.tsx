@@ -103,7 +103,7 @@ const ReturnRequestPrintView: React.FC<ReturnRequestPrintViewProps> = ({
             {toPersianNumber(request.quantity)} قلم
           </div>
           <div>
-            <span className="font-bold">قیمت واحد:</span>{' '}
+            <span className="font-bold">قیمت:</span>{' '}
             {toPersianNumber(unitPrice)} تومان
           </div>
           <div className="col-span-2">

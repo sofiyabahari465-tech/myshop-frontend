@@ -342,7 +342,7 @@ const ProductsTable: React.FC<Props> = ({
                     event.target.value,
                   );
                 }}
-                placeholder="جستجوی نام محصول، برند یا دسته‌بندی..."
+                placeholder="جستجوی عنوان، برند یا دسته‌بندی..."
                 className="w-full rounded-xl border border-gray-300 bg-white py-2.5 pl-3 pr-10 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100"
               />
             </div>
@@ -423,7 +423,7 @@ const ProductsTable: React.FC<Props> = ({
             <thead className="border-b border-gray-300 bg-gray-100 dark:border-gray-700 dark:bg-gray-800">
               <tr>
                 <th className="border-l border-gray-200 px-4 py-3 text-right text-sm font-bold text-gray-700 dark:border-gray-700 dark:text-gray-300">
-                  نام محصول
+                  عنوان
                 </th>
 
                 <th className="border-l border-gray-200 px-4 py-3 text-center text-sm font-bold text-gray-700 dark:border-gray-700 dark:text-gray-300">

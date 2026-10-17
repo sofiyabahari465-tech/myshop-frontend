@@ -122,8 +122,8 @@ const WAREHOUSE_CATEGORIES = [
 const PRODUCT_COLUMN_NAMES = [
   'عنوان',
   'نام',
-  'نام کالا',
-  'نام محصول',
+  'عنوان',
+  'عنوان',
   'کالا',
   'محصول',
   'Name',
@@ -172,7 +172,7 @@ const QUANTITY_COLUMN_NAMES = [
 
 const PRICE_COLUMN_NAMES = [
   'قیمت',
-  'قیمت واحد',
+  'قیمت',
   'قیمت کالا',
   'قیمت محصول',
   'مبلغ',
@@ -979,7 +979,7 @@ const RepresentativeWarehouseDashboard: React.FC<Props> = ({
 
       if (headerRowIndex < 0) {
         throw new Error(
-          'هیچ سطری شامل عنوان ستون‌های شناخته‌شده پیدا نشد. لطفاً یک سطر شامل «نام کالا»، «تعداد» و «قیمت» داشته باشید.',
+          'هیچ سطری شامل عنوان ستون‌های شناخته‌شده پیدا نشد. لطفاً یک سطر شامل «عنوان»، «تعداد» و «قیمت» داشته باشید.',
         );
       }
 
@@ -1026,7 +1026,7 @@ const RepresentativeWarehouseDashboard: React.FC<Props> = ({
 
       if (!hasExcelColumn(rows, PRODUCT_COLUMN_NAMES)) {
         throw new Error(
-          `ستون نام کالا پیدا نشد. ستون‌ها: ${columns}`,
+          `ستون عنوان پیدا نشد. ستون‌ها: ${columns}`,
         );
       }
 
@@ -1603,7 +1603,7 @@ const RepresentativeWarehouseDashboard: React.FC<Props> = ({
                     <th className="w-[17%] p-2">دسته</th>
                     <th className="w-[9%] p-2">تعداد</th>
                     <th className="w-[13%] p-2">
-                      قیمت واحد
+                      قیمت
                     </th>
                     <th className="w-[12%] p-2">
                       وضعیت
@@ -1947,7 +1947,7 @@ const RepresentativeWarehouseDashboard: React.FC<Props> = ({
                   تعداد  
                 </th>
                 <th className="w-[16%] p-3">
-                  قیمت واحد
+                  قیمت
                 </th>
                 <th className="w-[18%] p-3">
                    موجودی

@@ -1064,7 +1064,7 @@ const ReturnRequests: React.FC = () => {
                       <div className="rounded-xl border border-emerald-100 bg-emerald-50/70 p-3.5 dark:border-emerald-900/40 dark:bg-emerald-900/15">
                         <div className="flex items-center gap-2 text-xs font-bold text-emerald-700 dark:text-emerald-300">
                           <Wallet className="h-4 w-4" />
-                          قیمت واحد
+                          قیمت
                         </div>
 
                         <p className="mt-2 text-lg font-black text-emerald-700 dark:text-emerald-400">

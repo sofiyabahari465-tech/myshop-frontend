@@ -727,10 +727,6 @@ const ReturnRequests: React.FC = () => {
       window.setTimeout(() => {
         printWindow.print();
       }, 300);
-
-      printWindow.onafterprint = () => {
-        printWindow.close();
-      };
     };
   };
 

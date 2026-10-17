@@ -700,16 +700,6 @@ const InventorySection = ({
 
                 <button
                   type="button"
-                  onClick={openTemplateSettings}
-                  className="flex min-h-11 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-sm font-black text-slate-700 transition hover:bg-slate-50 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"
-                >
-                  <Settings2 className="h-4 w-4" />
-                  تنظیمات چاپ
-                </button>
-
-
-                <button
-                  type="button"
                   onClick={openPrintPreview}
                   disabled={filteredItems.length === 0}
                   className="flex min-h-11 items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 text-sm font-black text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:text-slate-500 dark:bg-slate-700 dark:hover:bg-slate-600"

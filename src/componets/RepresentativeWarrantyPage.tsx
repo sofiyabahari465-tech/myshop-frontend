@@ -802,10 +802,6 @@ const RepresentativeWarrantyPage: React.FC = () => {
               </div>
 
               <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-                <p className="text-xs font-bold text-slate-500">
-                  قیمت واحد کالا
-                </p>
-
                 <p className="mt-1 font-black text-slate-800">
                   {selectedProduct
                     ? formatPrice(

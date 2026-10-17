@@ -1472,9 +1472,7 @@ const SalesReportsAdminTable = ({
 
                           <div className="mt-4 grid grid-cols-2 gap-3">
                             <div className="rounded-lg bg-gray-50 p-3 dark:bg-gray-800">
-                              <p className="text-xs font-bold text-gray-500 dark:text-gray-400">
-                                قیمت واحد
-                              </p>
+                              
 
                               <p className="mt-1 text-xs font-black text-gray-700 dark:text-gray-100">
                                 {formatToman(getItemUnitPrice(item))}

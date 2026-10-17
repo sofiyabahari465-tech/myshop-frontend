@@ -1902,9 +1902,7 @@ const RepresentativeWarehouseDashboard: React.FC<Props> = ({
                 </div>
 
                 <div className="rounded-xl bg-gray-50 p-3 dark:bg-gray-700">
-                  <p className="text-gray-500 dark:text-gray-300">
-                    قیمت واحد
-                  </p>
+                  
 
                   <p className="mt-2 break-words font-bold text-gray-800 dark:text-gray-100">
                     {formatNumber(item.unitPrice)} تومان

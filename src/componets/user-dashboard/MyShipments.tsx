@@ -583,9 +583,7 @@ const MyShipments: React.FC<Props> = ({
                                         </div>
 
                                         <div className="rounded-lg bg-white p-2 dark:bg-gray-900">
-                                          <p className="text-gray-500">
-                                            قیمت واحد
-                                          </p>
+                                          
                                           <p className="font-black text-gray-800 dark:text-white">
                                             {formatNumber(
                                               item.unitPrice,

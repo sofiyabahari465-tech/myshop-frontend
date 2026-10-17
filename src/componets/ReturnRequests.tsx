@@ -656,7 +656,7 @@ const ReturnRequests: React.FC = () => {
                 </div>
 
                 <div>
-                  <span class="label">قیمت واحد:</span>
+                  
                   ${toPersianNumber(unitPrice)} تومان
                 </div>
 

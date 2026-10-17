@@ -1014,7 +1014,7 @@ const PrintContent = ({
             <th>ردیف</th>
             <th>نام کالا</th>
             <th>تعداد</th>
-            <th>قیمت واحد</th>
+            <th>قیمت</th>
             <th>مبلغ کل</th>
           </tr>
         </thead>

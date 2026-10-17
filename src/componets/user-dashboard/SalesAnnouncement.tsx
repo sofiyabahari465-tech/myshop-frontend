@@ -816,9 +816,7 @@ const SalesAnnouncement = ({
                           </div>
 
                           <div className="rounded-xl bg-indigo-50 p-2.5 text-center dark:bg-indigo-950/30">
-                            <p className="text-xs font-bold text-indigo-700 dark:text-indigo-300">
-                              قیمت واحد
-                            </p>
+                            
 
                             <p className="mt-1 font-black text-indigo-900 dark:text-indigo-100">
                               {formatToman(

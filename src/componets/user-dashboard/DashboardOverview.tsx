@@ -143,7 +143,7 @@ const DashboardOverview = ({
   );
 
   /*
-    ارزش فعلی تمام اقلام باقیمانده در انبار نماینده.
+    مجموع باقیمانده در انبار نماینده.
     مقدار معمولاً از:
     representative.storeItemsTotalValue
     دریافت می‌شود.
@@ -151,7 +151,7 @@ const DashboardOverview = ({
   const normalizedInventoryValue = toNumber(inventoryValue);
 
   /*
-    مانده اعتبار = مبلغ اعتبار - ارزش فعلی انبار.
+    مانده اعتبار = مبلغ اعتبار - مجموع.
   */
   const remainingCredit =
     normalizedCreditAmount - normalizedInventoryValue;
@@ -194,7 +194,7 @@ const DashboardOverview = ({
       color: 'emerald',
     },
     {
-      title: 'تعداد اقلام در انبار',
+      title: 'تعداد در انبار',
       value: `${toPersianNumber(
         normalizedInventoryItemCount,
       )} قلم`,

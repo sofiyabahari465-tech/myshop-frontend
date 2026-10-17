@@ -218,7 +218,7 @@ const SalesAnnouncement = ({
       });
 
       setErrorMessage(
-        `تعداد فروش «${product.productName}» نمی‌تواند بیشتر از موجودی (${toPersianNumber(
+        `تعداد «${product.productName}» نمی‌تواند بیشتر از موجودی (${toPersianNumber(
           availableQuantity,
         )}) باشد.`,
       );
@@ -253,7 +253,7 @@ const SalesAnnouncement = ({
 
     if (selectedItems.length === 0) {
       setErrorMessage(
-        'حداقل برای یک کالا، تعداد فروش بیشتر از صفر وارد کنید.',
+        'حداقل برای یک کالا، تعداد بیشتر از صفر وارد کنید.',
       );
       return;
     }
@@ -271,7 +271,7 @@ const SalesAnnouncement = ({
 
     if (invalidItem) {
       setErrorMessage(
-        `تعداد فروش «${invalidItem.product.productName}» بیشتر از موجودی انبار است.`,
+        `تعداد «${invalidItem.product.productName}» بیشتر از موجودی انبار است.`,
       );
       return;
     }
@@ -442,7 +442,7 @@ const SalesAnnouncement = ({
                   </th>
 
                   <th className="px-4 py-4 font-black">
-                    تعداد فروش
+                    تعداد
                   </th>
 
                   <th className="px-4 py-4 font-black">
@@ -528,7 +528,7 @@ const SalesAnnouncement = ({
 
               <div className="rounded-2xl bg-amber-50 p-4 dark:bg-amber-950/30">
                 <p className="text-xs font-bold text-amber-600 dark:text-amber-300">
-                  مجموع تعداد فروش
+                  مجموع تعداد
                 </p>
 
                 <p className="mt-2 text-xl font-black text-amber-800 dark:text-amber-100">

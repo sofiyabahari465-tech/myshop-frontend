@@ -721,7 +721,7 @@ const InventorySection = ({
 
               {hasActiveFilters && (
                 <p className="text-xs text-slate-500 dark:text-slate-400">
-                  تعداد اقلام نتایج: {toPersianNumber(filteredQuantity)} قلم · ارزش نتایج: {toPersianNumber(filteredValue)} تومان
+                  تعداد نتایج: {toPersianNumber(filteredQuantity)} قلم · مجموع: {toPersianNumber(filteredValue)} تومان
                 </p>
               )}
             </div>

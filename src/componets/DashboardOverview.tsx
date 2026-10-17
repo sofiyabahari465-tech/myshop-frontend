@@ -106,7 +106,7 @@ const DashboardOverview: React.FC<DashboardOverviewProps> = ({
   ).length;
 
 
-  // 2. تعداد اقلام محصولات انبار (جمع storeItemsCount همه نمایندگان)
+  // 2. تعداد محصولات انبار (جمع storeItemsCount همه نمایندگان)
   const warehouseItemsCount = safeRepresentatives.reduce(
     (sum, rep) => sum + (Number(rep.storeItemsCount) || 0),
     0,
@@ -169,9 +169,9 @@ const DashboardOverview: React.FC<DashboardOverviewProps> = ({
       />
 
 
-      {/* باکس 2: تعداد اقلام محصولات انبار */}
+      {/* باکس 2: تعداد محصولات انبار */}
       <DashboardCard
-        title="تعداد اقلام محصولات انبار"
+        title="تعداد محصولات انبار"
         value={toPersianNumber(warehouseItemsCount)}
         description="مجموع کالاهای ثبت‌شده در انبار نمایندگان"
         icon={<Boxes className="h-6 w-6" />}

@@ -1877,7 +1877,7 @@ const RepresentativeDashboard: React.FC<Props> = ({
 
           <DashboardCard
             index={7}
-            title="تعداد اقلام موجود در انبار فروشگاه"
+            title="تعداد موجود در انبار فروشگاه"
           >
             <div className="flex items-center justify-center gap-2">
               <Package className="h-8 w-8 text-purple-600 dark:text-purple-400" />

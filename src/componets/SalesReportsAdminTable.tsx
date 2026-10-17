@@ -1033,12 +1033,12 @@ p { margin: 4px 0; }
       {/* کارت‌های آماری */}
      {/* کارت‌های آماری – طراحی خفن و هم‌سطح */}
 <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-2">
-  {/* باکس ۱: تعداد اعلام فروش‌ها */}
+  {/* باکس ۱: تعداد */}
   <div className="group relative flex h-36 overflow-hidden rounded-3xl border border-cyan-200 bg-gradient-to-br from-cyan-50 via-white to-white p-5 shadow-md transition-all hover:-translate-y-1 hover:shadow-xl dark:border-cyan-900/50 dark:from-cyan-950/30 dark:via-gray-900 dark:to-gray-900">
     <div className="relative z-10 flex w-full items-center justify-between gap-3">
       <div className="min-w-0 flex-1">
         <p className="text-xs font-bold uppercase tracking-wide text-cyan-700 dark:text-cyan-300">
-          تعداد اعلام فروش‌ها
+          تعداد
         </p>
 
         <p className="mt-2 text-3xl font-black text-cyan-900 dark:text-cyan-100">
@@ -1247,7 +1247,7 @@ p { margin: 4px 0; }
 
                       <div className="rounded-xl bg-amber-50 p-3 dark:bg-amber-950/30">
                         <p className="text-xs font-bold text-amber-700 dark:text-amber-300">
-                          تعداد کل فروش
+                          تعداد
                         </p>
 
                         <p className="mt-1 font-black text-amber-900 dark:text-amber-100">
@@ -1628,7 +1628,7 @@ p { margin: 4px 0; }
                             </th>
 
                             <th className="px-5 py-4 font-black">
-                              تعداد فروش
+                              تعداد
                             </th>
 
                             <th className="px-5 py-4 font-black">
@@ -1775,7 +1775,7 @@ p { margin: 4px 0; }
                   <th>کد نمایندگی</th>
                   <th>نام نمایندگی</th>
                   <th>شهر</th>
-                  <th>تعداد اقلام</th>
+                  <th>تعداد</th>
                   <th>مبلغ کل</th>
                   <th>جزئیات کالاها</th>
                 </tr>
@@ -1854,7 +1854,7 @@ p { margin: 4px 0; }
             <section className="admin-invoice-summary">
               <div className="admin-summary-card">
                 <p className="admin-summary-label">
-                  تعداد گزارش‌های چاپ‌شده
+                  تعداد
                 </p>
 
                 <p className="admin-summary-value">
@@ -1864,7 +1864,7 @@ p { margin: 4px 0; }
 
               <div className="admin-summary-card">
                 <p className="admin-summary-label">
-                  تعداد کل اقلام فروخته‌شده
+                  تعداد
                 </p>
 
                 <p className="admin-summary-value">
@@ -2181,7 +2181,7 @@ p { margin: 4px 0; }
                               <th>کد نمایندگی</th>
                               <th>نام نمایندگی</th>
                               <th>شهر</th>
-                              <th>تعداد اقلام</th>
+                              <th>تعداد</th>
                               <th>مبلغ کل</th>
                               <th>جزئیات کالاها</th>
                             </tr>
@@ -2260,7 +2260,7 @@ p { margin: 4px 0; }
                         <section className="admin-invoice-summary">
                           <div className="admin-summary-card">
                             <p className="admin-summary-label">
-                              تعداد گزارش‌های چاپ‌شده
+                              تعداد
                             </p>
 
                             <p className="admin-summary-value">
@@ -2270,7 +2270,7 @@ p { margin: 4px 0; }
 
                           <div className="admin-summary-card">
                             <p className="admin-summary-label">
-                              تعداد کل اقلام فروخته‌شده
+                              تعداد
                             </p>
 
                             <p className="admin-summary-value">

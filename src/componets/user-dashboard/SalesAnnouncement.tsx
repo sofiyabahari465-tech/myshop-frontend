@@ -520,7 +520,7 @@ const SalesAnnouncement = ({
       currentQuantity >= availableQuantity
     ) {
       setSalesReportMessage(
-        `❌ تعداد فروش «${product.productName}» نمی‌تواند بیشتر از موجودی (${formatFaNumber(
+        `❌ تعداد «${product.productName}» نمی‌تواند بیشتر از موجودی (${formatFaNumber(
           availableQuantity,
         )}) باشد.`,
       );
@@ -570,7 +570,7 @@ const SalesAnnouncement = ({
 
     if (selectedSaleItems.length === 0) {
       setSalesReportMessage(
-        '❌ حداقل برای یک کالا تعداد فروش بیشتر از صفر وارد کنید.',
+        '❌ حداقل برای یک کالا تعداد بیشتر از صفر وارد کنید.',
       );
 
       return;
@@ -904,7 +904,7 @@ const SalesAnnouncement = ({
                         </th>
 
                         <th className="px-5 py-4 font-black">
-                          تعداد فروش
+                          تعداد
                         </th>
 
                         <th className="px-5 py-4 font-black">
@@ -1029,7 +1029,7 @@ const SalesAnnouncement = ({
 
                   <div className="rounded-2xl bg-amber-50 p-4 dark:bg-amber-950/30">
                     <p className="text-xs font-bold text-amber-700 dark:text-amber-300">
-                      تعداد کل فروش
+                      تعداد
                     </p>
 
                     <p className="mt-2 text-xl font-black text-amber-900 dark:text-amber-100">
@@ -1208,7 +1208,7 @@ const SalesAnnouncement = ({
 
                       <div className="rounded-xl bg-amber-50 p-3 dark:bg-amber-950/30">
                         <p className="text-xs font-bold text-amber-700 dark:text-amber-300">
-                          تعداد کل فروش
+                          تعداد
                         </p>
 
                         <p className="mt-1 font-black text-amber-900 dark:text-amber-100">
@@ -1248,7 +1248,7 @@ const SalesAnnouncement = ({
                       </th>
 
                       <th className="px-5 py-4 font-black">
-                        تعداد کل فروش
+                        تعداد
                       </th>
 
                       <th className="px-5 py-4 font-black">

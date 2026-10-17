@@ -6,6 +6,7 @@ import React, {
 
 
 import { createPortal } from 'react-dom';
+import { usePrint } from '../../hooks/usePrint';
 
 
 
@@ -135,6 +136,8 @@ const InventoryPrint = ({
   filterDescription,
   onClose,
 }: InventoryPrintProps) => {
+  const { printContent, isMobile } = usePrint();
+
   const safeItems = useMemo(
     () =>
       Array.isArray(items)
@@ -1052,9 +1055,7 @@ const InventoryPrint = ({
           <button
             type="button"
             className="inventory-print-button"
-            onClick={() => {
-              window.print();
-            }}
+            onClick={() => { printContent('inventory-print-root', 'چاپ موجودی انبار'); }}
           >
             چاپ
           </button>

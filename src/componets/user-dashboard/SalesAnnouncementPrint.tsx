@@ -1,4 +1,5 @@
 import React from 'react';
+import { usePrint } from '../../hooks/usePrint';
 
 
 type SaleItem = {
@@ -199,6 +200,8 @@ const SalesAnnouncementPrint = ({
   settings,
   onClose,
 }: Props) => {
+  const { printContent, isMobile } = usePrint();
+
   const printSettings = getSettings(settings);
   const isBulk = Array.isArray(reports);
 
@@ -233,7 +236,7 @@ const SalesAnnouncementPrint = ({
 
 
   const printPage = () => {
-    window.print();
+    printContent('sales-print-root', 'چاپ اعلام فروش');
   };
 
 

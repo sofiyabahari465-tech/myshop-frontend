@@ -615,6 +615,42 @@ const SalesReportsAdminTable = ({
   };
 
   const handlePrint = () => {
+    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+      const element = document.querySelector('.admin-print-only') as HTMLElement;
+      if (element) {
+        const printWindow = window.open('', '_blank', 'width=800,height=900');
+        if (!printWindow) {
+          alert('لطفاً popup blocker را غیرفعال کنید');
+          return;
+        }
+        printWindow.document.write(`
+          <!DOCTYPE html>
+          <html lang="fa" dir="rtl">
+            <head>
+              <meta charset="UTF-8" />
+              <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+              <title>چاپ گزارش فروش</title>
+              <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" />
+              <style>
+                * { margin: 0; padding: 0; box-sizing: border-box; }
+                body { font-family: 'Vazirmatn', Tahoma, Arial, sans-serif; direction: rtl; padding: 20px; background: white; color: #111827; }
+                table { width: 100%; border-collapse: collapse; margin: 10px 0; table-layout: fixed; }
+                th, td { border: 1px solid #6b7280; padding: 6px 8px; text-align: right; font-size: 11px; word-wrap: break-word; word-break: break-word; }
+                th { background: #f3f4f6; font-weight: bold; }
+                img { max-width: 100%; height: auto; }
+                h1, h2, h3 { margin: 10px 0; }
+                @media print { @page { size: A4 portrait; margin: 10mm; } body { padding: 0; } }
+              </style>
+            </head>
+            <body>${element.innerHTML}</body>
+          </html>
+        `);
+        printWindow.document.close();
+        printWindow.focus();
+        setTimeout(() => { printWindow.print(); }, 500);
+        return;
+      }
+    }
     window.print();
   };
 

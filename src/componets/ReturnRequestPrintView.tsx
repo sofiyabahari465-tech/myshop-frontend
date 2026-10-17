@@ -1,11 +1,14 @@
 import React from 'react';
 import type { ReturnRequest } from '../types';
+import { usePrint } from '../hooks/usePrint';
 
 interface ReturnRequestPrintViewProps {
   request: ReturnRequest;
 }
 
 const toNumber = (value: unknown) => {
+  const { printContent, isMobile } = usePrint();
+
   const normalized = String(value ?? '')
     .replace(/[۰-۹]/g, (d) => String('۰۱۲۳۴۵۶۷۸۹'.indexOf(d)))
     .replace(/[٠-٩]/g, (d) => String('٠١٢٣٤٥٦٧٨٩'.indexOf(d)))

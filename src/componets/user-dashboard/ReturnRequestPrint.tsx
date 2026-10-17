@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import { usePrint } from '../../hooks/usePrint';
 
 
 export type ReturnPrintRequest = {
@@ -84,6 +85,8 @@ const formatDate = (value?: string): string => {
 
 
 const getTitle = (request: ReturnPrintRequest) => {
+  const { printContent, isMobile } = usePrint();
+
   return (
     String(
       request.items?.[0]?.productName ||
@@ -549,7 +552,7 @@ const ReturnRequestPrint = ({
           <button
             type="button"
             className="return-print-button"
-            onClick={() => window.print()}
+            onClick={() => printContent('return-print-root', 'چاپ درخواست مرجوعی')}
           >
             چاپ
           </button>

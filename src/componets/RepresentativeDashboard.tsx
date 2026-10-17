@@ -1861,7 +1861,7 @@ const RepresentativeDashboard: React.FC<Props> = ({
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <DashboardCard
             index={6}
-            title="تعداد ارسال بار"
+            title="تعداد"
           >
             <div className="flex items-center justify-center gap-2">
               <Truck className="h-8 w-8 text-blue-600 dark:text-blue-400" />

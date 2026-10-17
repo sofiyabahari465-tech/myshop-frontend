@@ -184,7 +184,7 @@ const DashboardOverview: React.FC<DashboardOverviewProps> = ({
       <DashboardCard
         title="مجموع مبلغ کل انبارها"
         value={`${toPersianNumber(warehouseTotalValue)} تومان`}
-        description="ارزش کل کالاهای انبار نمایندگان"
+        description="مجموع"
         icon={<Wallet className="h-6 w-6" />}
         iconClassName="bg-indigo-100 text-indigo-700 dark:bg-indigo-500/15 dark:text-indigo-400"
         valueClassName="text-indigo-700 dark:text-indigo-400"

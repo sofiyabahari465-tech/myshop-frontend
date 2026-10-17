@@ -584,7 +584,7 @@ const InventorySection = ({
 
             <div className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-slate-700 dark:bg-slate-800">
               <p className="text-xs font-bold text-slate-500 dark:text-slate-400">
-                ارزش کل انبار
+                مجموع
               </p>
 
 

@@ -1550,7 +1550,7 @@ const ReturnRequestsSection = ({
 
                   <div className="rounded-xl bg-white p-3 text-center shadow-sm dark:bg-gray-900">
                     <p className="text-xs font-bold text-gray-500 dark:text-gray-400">
-                      ارزش کل مرجوعی
+                      مجموع
                     </p>
 
 

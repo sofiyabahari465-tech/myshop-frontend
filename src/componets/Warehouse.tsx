@@ -599,7 +599,7 @@ const Warehouse: React.FC<WarehouseProps> = ({
         <div className="rounded-2xl border border-purple-100 bg-purple-50 p-4 dark:border-purple-900/50 dark:bg-purple-900/20">
           <div className="flex items-center justify-between">
             <p className="text-xs font-bold text-purple-700 dark:text-purple-300">
-              ارزش موجودی نمایندگان
+              مجموع نمایندگان
             </p>
 
             <Banknote className="h-5 w-5 text-purple-600" />
@@ -723,7 +723,7 @@ const Warehouse: React.FC<WarehouseProps> = ({
 
                     <div className="rounded-xl bg-purple-50 p-3 dark:bg-purple-900/20">
                       <p className="text-purple-700 dark:text-purple-300">
-                        ارزش موجودی
+                        مجموع
                       </p>
 
                       <p className="mt-2 break-words font-black text-purple-900 dark:text-purple-100">
@@ -766,7 +766,7 @@ const Warehouse: React.FC<WarehouseProps> = ({
                 </th>
 
                 <th className="w-[18%] p-3">
-                  ارزش موجودی
+                  مجموع
                 </th>
 
                 <th className="w-[14%] p-3">

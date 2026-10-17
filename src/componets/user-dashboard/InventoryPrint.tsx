@@ -1225,7 +1225,7 @@ const InventoryPrint = ({
                 <th style={{ width: '15%' }}>دسته‌بندی</th>
                 <th style={{ width: '10%' }}>مجموع</th>
                 <th style={{ width: '15%' }}>قیمت</th>
-                <th style={{ width: '15%' }}>ارزش کل</th>
+                <th style={{ width: '15%' }}>مجموع</th>
               </tr>
             </thead>
 
@@ -1359,7 +1359,7 @@ const InventoryPrint = ({
 
 
           <div className="inventory-print-summary-box">
-            <span>ارزش کل انبار</span>
+            <span>مجموع</span>
 
 
 

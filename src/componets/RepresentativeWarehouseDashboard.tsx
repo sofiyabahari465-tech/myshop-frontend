@@ -1424,7 +1424,7 @@ const RepresentativeWarehouseDashboard: React.FC<Props> = ({
           <div className="rounded-2xl border border-green-100 bg-green-50 p-4 dark:border-green-900/50 dark:bg-green-900/20">
             <div className="flex items-center justify-between">
               <p className="text-xs font-bold text-green-700 dark:text-green-300">
-                ارزش کل موجودی انبار
+                مجموع موجودی انبار
               </p>
 
               <Banknote className="h-5 w-5 text-green-500" />
@@ -1912,7 +1912,7 @@ const RepresentativeWarehouseDashboard: React.FC<Props> = ({
 
               <div className="mt-3 rounded-xl bg-green-50 p-3 dark:bg-green-900/20">
                 <p className="text-xs text-green-700 dark:text-green-300">
-                  ارزش موجودی این کالا
+                  مجموع این کالا
                 </p>
 
                 <p className="mt-2 break-words text-sm font-black text-green-900 dark:text-green-100">

@@ -736,7 +736,7 @@ const ReturnRequestPrint = ({
 
 
           <span>
-            ارزش کل مرجوعی‌ها:{' '}
+            مجموع‌ها:{' '}
             {formatNumber(totalValue)} تومان
           </span>
         </footer>

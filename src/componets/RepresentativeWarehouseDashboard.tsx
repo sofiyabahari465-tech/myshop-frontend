@@ -1949,9 +1949,7 @@ const RepresentativeWarehouseDashboard: React.FC<Props> = ({
                 <th className="w-[16%] p-3">
                   قیمت
                 </th>
-                <th className="w-[18%] p-3">
-                   موجودی
-                </th>
+                <th className="w-[18%] p-3">مجموع</th>
                 <th className="w-[10%] p-3">
                   عملیات
                 </th>

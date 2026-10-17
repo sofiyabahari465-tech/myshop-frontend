@@ -17,7 +17,6 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  /* جلوگیری از اسکرول افقی */
   overflow-x: hidden;
   max-width: 100vw;
 }
@@ -25,24 +24,21 @@ body {
 /* اعداد فارسی برای همه چیز */
 * {
   font-feature-settings: 'ss01';
-  /* جلوگیری از overflow افقی */
   max-width: 100%;
 }
 
-/* جلوگیری از overflow افقی روی همه container‌ها */
+/* جلوگیری از overflow افقی */
 body,
 main,
 section,
 article,
-div,
-table {
+div {
   max-width: 100%;
 }
 
-/* جلوگیری از اسکرول افقی روی table‌ها */
 table {
   table-layout: auto;
-  width: 100% !important;
+  width: 100%;
 }
 
 /* اسکرول‌بار زیبا */
@@ -80,7 +76,7 @@ input[type='tel'] {
   font-display: swap;
 }
 
-/* انیمیشن fade-in برای محتوا */
+/* انیمیشن fade-in */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -115,20 +111,16 @@ button {
     min-height: 44px;
   }
 
-  /* جلوگیری از اسکرول افقی */
   html,
   body {
     overflow-x: hidden;
   }
 
-  /* جدول‌ها در موبایل - بدون اسکرول افقی */
   table {
     width: 100% !important;
     max-width: 100% !important;
-    overflow-x: hidden;
   }
 
-  /* جلوگیری از overflow محتوا */
   img,
   video,
   canvas {
@@ -154,14 +146,18 @@ button {
     background: #ffffff !important;
     direction: rtl !important;
     font-family: 'Vazirmatn', Tahoma, Arial, sans-serif !important;
-    overflow: visible !important;
     width: 100% !important;
     max-width: 100% !important;
+    /* حذف overflow:hidden که باعث خروج از صفحه میشه */
+    overflow: visible !important;
+    /* حذف position absolute که مشکل ایجاد می‌کنه */
+    position: static !important;
   }
 
   /* پنهان کردن تمام عناصر به جز چاپ */
   body * {
     visibility: hidden !important;
+    position: static !important;
   }
 
   /* فقط بخش چاپ نمایش داده شود */
@@ -169,19 +165,27 @@ button {
   .admin-print-only *,
   .print-only,
   .print-only *,
+  .inventory-print-only,
+  .inventory-print-only *,
   [class*='print-root'],
-  [class*='print-root'] * {
+  [class*='print-root'] *,
+  #print-root,
+  #print-root * {
     visibility: visible !important;
+    position: static !important;
   }
 
   .admin-print-only,
   .print-only,
-  [class*='print-root'] {
+  .inventory-print-only,
+  [class*='print-root'],
+  #print-root {
     display: block !important;
-    position: absolute !important;
-    top: 0 !important;
-    right: 0 !important;
-    left: 0 !important;
+    position: static !important;
+    /* حذف position absolute که باعث خروج میشه */
+    top: auto !important;
+    right: auto !important;
+    left: auto !important;
     width: 100% !important;
     max-width: 100% !important;
     padding: 0 !important;
@@ -194,13 +198,28 @@ button {
     display: none !important;
   }
 
-  /* جدول‌های چاپ - بدون اسکرول افقی */
+  /* جدول‌های چاپ */
   table {
     width: 100% !important;
     max-width: 100% !important;
     table-layout: fixed !important;
     border-collapse: collapse !important;
     overflow: visible !important;
+    /* اطمینان از نمایش کامل در صفحه چاپ */
+    page-break-inside: auto !important;
+  }
+
+  tr {
+    page-break-inside: avoid !important;
+    page-break-after: auto !important;
+  }
+
+  thead {
+    display: table-header-group !important;
+  }
+
+  tfoot {
+    display: table-footer-group !important;
   }
 
   /* برای موبایل: اندازه فونت کوچک‌تر */
@@ -225,18 +244,15 @@ button {
 
 /* بهبود responsive جداول در موبایل */
 @media (max-width: 640px) {
-  /* جدول‌ها: عرض ثابت، قابل اسکرول عمودی */
   .table-responsive {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
   }
 
-  /* کارت‌ها به‌جای جدول */
   .mobile-cards {
     display: block !important;
   }
 
-  /* جدول مخفی در موبایل */
   .desktop-table-only {
     display: none !important;
   }

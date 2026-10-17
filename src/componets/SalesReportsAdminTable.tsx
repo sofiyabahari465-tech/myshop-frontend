@@ -615,45 +615,58 @@ const SalesReportsAdminTable = ({
   };
 
   const handlePrint = () => {
-    const element = document.querySelector(
-      '.admin-print-only',
-    ) as HTMLElement;
-    if (!element) {
-      // fallback به window.print
-      window.print();
-      return;
-    }
+    // صبر کن محتوای چاپ رندر بشه، بعد چاپ کن
+    setTimeout(() => {
+      const element = document.querySelector(
+        '.admin-print-only',
+      ) as HTMLElement;
+      if (!element) {
+        console.warn('محتوای چاپ پیدا نشد');
+        window.print();
+        return;
+      }
 
-    // حذف iframe قبلی
-    const oldIframe = document.getElementById('print-iframe');
-    if (oldIframe && oldIframe.parentNode) {
-      document.body.removeChild(oldIframe);
-    }
+      // اطمینان از اینکه محتوا دیده میشه
+      const computedStyle = window.getComputedStyle(element);
+      if (computedStyle.display === 'none' || computedStyle.visibility === 'hidden') {
+        console.warn('محتوای چاپ مخفی است');
+      }
 
-    // ساخت iframe مخفی
-    const iframe = document.createElement('iframe');
-    iframe.id = 'print-iframe';
-    iframe.style.position = 'fixed';
-    iframe.style.right = '0';
-    iframe.style.bottom = '0';
-    iframe.style.width = '0';
-    iframe.style.height = '0';
-    iframe.style.border = '0';
-    iframe.style.overflow = 'hidden';
-    iframe.setAttribute('aria-hidden', 'true');
-    iframe.title = 'چاپ گزارش فروش';
+      // حذف iframe قبلی
+      const oldIframe = document.getElementById('print-iframe');
+      if (oldIframe && oldIframe.parentNode) {
+        document.body.removeChild(oldIframe);
+      }
 
-    document.body.appendChild(iframe);
+      // ساخت iframe مخفی
+      const iframe = document.createElement('iframe');
+      iframe.id = 'print-iframe';
+      iframe.style.position = 'fixed';
+      iframe.style.right = '0';
+      iframe.style.bottom = '0';
+      iframe.style.width = '0';
+      iframe.style.height = '0';
+      iframe.style.border = '0';
+      iframe.style.overflow = 'hidden';
+      iframe.setAttribute('aria-hidden', 'true');
+      iframe.title = 'چاپ گزارش فروش';
 
-    const doc = iframe.contentWindow?.document || iframe.contentDocument;
-    if (!doc) {
-      if (iframe.parentNode) document.body.removeChild(iframe);
-      window.print();
-      return;
-    }
+      document.body.appendChild(iframe);
 
-    doc.open();
-    doc.write(`<!DOCTYPE html>
+      const doc = iframe.contentWindow?.document || iframe.contentDocument;
+      if (!doc) {
+        if (iframe.parentNode) document.body.removeChild(iframe);
+        window.print();
+        return;
+      }
+
+      // استخراج فقط استایل‌های مربوط به چاپ از صفحه اصلی
+      const allStyles = Array.from(document.querySelectorAll('style, link[rel="stylesheet"]'))
+        .map((node) => node.outerHTML)
+        .join('\n');
+
+      doc.open();
+      doc.write(`<!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8" />
@@ -684,46 +697,47 @@ p { margin: 4px 0; }
 }
 </style>
 </head>
-<body>${element.innerHTML}</body>
+<body>${element.outerHTML}</body>
 </html>`);
-    doc.close();
+      doc.close();
 
-    const triggerPrint = () => {
-      try {
-        iframe.contentWindow?.focus();
-        setTimeout(() => {
-          try {
-            iframe.contentWindow?.print();
-          } catch (e) {
-            console.error('خطا در چاپ:', e);
-          }
+      const triggerPrint = () => {
+        try {
+          iframe.contentWindow?.focus();
           setTimeout(() => {
-            if (iframe.parentNode) {
-              document.body.removeChild(iframe);
+            try {
+              iframe.contentWindow?.print();
+            } catch (e) {
+              console.error('خطا در چاپ:', e);
             }
-          }, 1000);
-        }, 300);
-      } catch (e) {
-        console.error('خطا در چاپ:', e);
-        if (iframe.parentNode) {
-          document.body.removeChild(iframe);
+            setTimeout(() => {
+              if (iframe.parentNode) {
+                document.body.removeChild(iframe);
+              }
+            }, 1000);
+          }, 500);
+        } catch (e) {
+          console.error('خطا در چاپ:', e);
+          if (iframe.parentNode) {
+            document.body.removeChild(iframe);
+          }
         }
-      }
-    };
+      };
 
-    if (iframe.contentWindow?.document?.readyState === 'complete') {
-      triggerPrint();
-    } else {
-      iframe.onload = triggerPrint;
-      setTimeout(() => {
-        if (
-          iframe.parentNode &&
-          iframe.contentWindow?.document?.readyState === 'complete'
-        ) {
-          triggerPrint();
-        }
-      }, 2000);
-    }
+      if (iframe.contentWindow?.document?.readyState === 'complete') {
+        triggerPrint();
+      } else {
+        iframe.onload = triggerPrint;
+        setTimeout(() => {
+          if (
+            iframe.parentNode &&
+            iframe.contentWindow?.document?.readyState === 'complete'
+          ) {
+            triggerPrint();
+          }
+        }, 3000);
+      }
+    }, 200); // 200ms صبر برای رندر محتوا
   };
 
   if (loading) {

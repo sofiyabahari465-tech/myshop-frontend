@@ -85,8 +85,6 @@ const formatDate = (value?: string): string => {
 
 
 const getTitle = (request: ReturnPrintRequest) => {
-  const { printContent, isMobile } = usePrint();
-
   return (
     String(
       request.items?.[0]?.productName ||
@@ -163,6 +161,8 @@ const ReturnRequestPrint = ({
   representativePhone,
   onClose,
 }: ReturnRequestPrintProps) => {
+  const { printContent, isMobile } = usePrint();
+
   const safeRequests = Array.isArray(requests)
     ? requests
     : [];

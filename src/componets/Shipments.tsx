@@ -1898,6 +1898,33 @@ const Shipments: React.FC = () => {
               </p>
             ) : (
               <>
+                {/* باکس مجموع این بار */}
+                <div className="mb-4 rounded-2xl bg-gradient-to-l from-cyan-50 via-blue-50 to-purple-50 p-4 dark:from-cyan-950/30 dark:via-blue-950/30 dark:to-purple-950/30">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500 to-purple-600 text-white">
+                        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="text-xs font-bold text-gray-500 dark:text-gray-400">
+                          مجموع این بار
+                        </p>
+                        <p className="text-xs text-gray-400 dark:text-gray-500">
+                          {formatNumber(selectedShipment.items.length)} قلم · {formatNumber(selectedShipment.items.reduce((sum, i) => sum + i.quantity, 0))} عدد
+                        </p>
+                      </div>
+                    </div>
+                    <div className="text-left">
+                      <p className="text-lg font-black text-transparent bg-clip-text bg-gradient-to-l from-cyan-600 to-purple-600 dark:from-cyan-400 dark:to-purple-400 sm:text-xl">
+                        {formatNumber(selectedShipment.items.reduce((sum, i) => sum + (i.totalPrice ?? i.quantity * i.unitPrice), 0))}
+                      </p>
+                      <p className="text-xs font-bold text-gray-500 dark:text-gray-400">تومان</p>
+                    </div>
+                  </div>
+                </div>
+
                 {/* نسخه موبایل: کارت‌های باکسی */}
                 <div className="space-y-2 sm:hidden">
                   {selectedShipment.items.map((item, index) => (

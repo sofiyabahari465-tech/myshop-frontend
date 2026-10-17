@@ -183,7 +183,7 @@ const COLUMN_ALIASES = {
   price: [
     'قیمت',
     'قیمت',
-    'بهای واحد',
+    'قیمت',
     'unitPrice',
     'Unit Price',
     'Price',
@@ -1868,71 +1868,147 @@ const Shipments: React.FC = () => {
                 اقلام بار برای نمایش موجود نیستند.
               </p>
             ) : (
-              <div className="max-h-80 overflow-auto rounded-xl border border-gray-200 dark:border-gray-700">
-                <table className="w-full min-w-[650px] text-right text-sm">
-                  <thead className="sticky top-0 bg-gray-100 dark:bg-gray-800 dark:text-white">
-                    <tr>
-                      <th className="p-3">عنوان</th>
-                      <th className="p-3">برند</th>
-                      <th className="p-3">
-                        دسته‌بندی
-                      </th>
-                      <th className="p-3">تعداد</th>
-                      <th className="p-3">
-                        قیمت
-                      </th>
-                      <th className="p-3">
-                        مبلغ
-                      </th>
-                    </tr>
-                  </thead>
+              <>
+                {/* باکس مجموع این بار */}
+                <div className="mb-4 rounded-2xl bg-gradient-to-l from-cyan-50 via-blue-50 to-purple-50 p-4 dark:from-cyan-950/30 dark:via-blue-950/30 dark:to-purple-950/30">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500 to-purple-600 text-white">
+                        <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="text-xs font-bold text-gray-500 dark:text-gray-400">
+                          مجموع این بار
+                        </p>
+                        <p className="text-xs text-gray-400 dark:text-gray-500">
+                          {formatNumber(selectedShipment.items.length)} قلم · {formatNumber(selectedShipment.items.reduce((sum, i) => sum + i.quantity, 0))} عدد
+                        </p>
+                      </div>
+                    </div>
+                    <div className="text-left">
+                      <p className="text-lg font-black text-transparent bg-clip-text bg-gradient-to-l from-cyan-600 to-purple-600 dark:from-cyan-400 dark:to-purple-400 sm:text-xl">
+                        {formatNumber(selectedShipment.items.reduce((sum, i) => sum + (i.totalPrice ?? i.quantity * i.unitPrice), 0))}
+                      </p>
+                      <p className="text-xs font-bold text-gray-500 dark:text-gray-400">تومان</p>
+                    </div>
+                  </div>
+                </div>
 
-                  <tbody>
-                    {selectedShipment.items.map(
-                      (item, index) => (
-                        <tr
-                          key={String(
-                            item.id ?? index,
-                          )}
-                          className="border-t border-gray-100 dark:border-gray-700 dark:text-white"
-                        >
-                          <td className="p-3 font-bold">
-                            {item.productName}
-                          </td>
+                {/* نسخه موبایل: کارت‌های باکسی */}
+                <div className="space-y-2 sm:hidden">
+                  {selectedShipment.items.map((item, index) => (
+                    <div
+                      key={String(item.id ?? index)}
+                      className="rounded-xl border border-gray-200 bg-gray-50 p-3 dark:border-gray-700 dark:bg-gray-800"
+                    >
+                      <p className="font-black text-gray-800 dark:text-white">
+                        {item.productName}
+                      </p>
+                      <div className="mt-2 grid grid-cols-2 gap-2 text-xs">
+                        <div className="rounded-lg bg-white p-2 dark:bg-gray-900">
+                          <p className="text-gray-500">تعداد</p>
+                          <p className="font-black text-gray-800 dark:text-white">
+                            {formatNumber(item.quantity)}
+                          </p>
+                        </div>
+                        <div className="rounded-lg bg-white p-2 dark:bg-gray-900">
+                          <p className="text-gray-500">قیمت</p>
+                          <p className="font-black text-gray-800 dark:text-white">
+                            {formatNumber(item.unitPrice)} ت
+                          </p>
+                        </div>
+                      </div>
+                      <div className="mt-2 flex flex-wrap gap-2 text-[11px] text-gray-500 dark:text-gray-400">
+                        {item.brand && (
+                          <span className="rounded-full bg-white px-2 py-0.5 dark:bg-gray-900">
+                            برند: {item.brand}
+                          </span>
+                        )}
+                        {item.category && (
+                          <span className="rounded-full bg-white px-2 py-0.5 dark:bg-gray-900">
+                            دسته: {item.category}
+                          </span>
+                        )}
+                      </div>
+                      <div className="mt-2 rounded-lg bg-green-50 p-2 text-xs dark:bg-green-950/20">
+                        <span className="text-gray-500">مبلغ کل: </span>
+                        <span className="font-black text-green-700 dark:text-green-300">
+                          {formatNumber(item.totalPrice ?? item.quantity * item.unitPrice)} تومان
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
 
-                          <td className="p-3">
-                            {item.brand || '—'}
-                          </td>
+                {/* نسخه دسکتاپ: جدول */}
+                <div className="hidden max-h-80 overflow-auto rounded-xl border border-gray-200 dark:border-gray-700 sm:block">
+                  <table className="w-full text-right text-sm">
+                    <thead className="sticky top-0 bg-gray-100 dark:bg-gray-800 dark:text-white">
+                      <tr>
+                        <th className="p-3">عنوان</th>
+                        <th className="p-3">برند</th>
+                        <th className="p-3">
+                          دسته‌بندی
+                        </th>
+                        <th className="p-3">تعداد</th>
+                        <th className="p-3">
+                          قیمت
+                        </th>
+                        <th className="p-3">
+                          مبلغ
+                        </th>
+                      </tr>
+                    </thead>
 
-                          <td className="p-3">
-                            {item.category || '—'}
-                          </td>
-
-                          <td className="p-3">
-                            {formatNumber(
-                              item.quantity,
+                    <tbody>
+                      {selectedShipment.items.map(
+                        (item, index) => (
+                          <tr
+                            key={String(
+                              item.id ?? index,
                             )}
-                          </td>
+                            className="border-t border-gray-100 dark:border-gray-700 dark:text-white"
+                          >
+                            <td className="p-3 font-bold">
+                              {item.productName}
+                            </td>
 
-                          <td className="p-3">
-                            {formatNumber(
-                              item.unitPrice,
-                            )}{' '}
-                            تومان
-                          </td>
+                            <td className="p-3">
+                              {item.brand || '—'}
+                            </td>
 
-                          <td className="p-3">
-                            {formatNumber(
-                              item.totalPrice,
-                            )}{' '}
-                            تومان
-                          </td>
+                            <td className="p-3">
+                              {item.category || '—'}
+                            </td>
+
+                            <td className="p-3">
+                              {formatNumber(
+                                item.quantity,
+                              )}
+                            </td>
+
+                            <td className="p-3">
+                              {formatNumber(
+                                item.unitPrice,
+                              )}{' '}
+                              تومان
+                            </td>
+
+                            <td className="p-3">
+                              {formatNumber(
+                                item.totalPrice,
+                              )}{' '}
+                              تومان
+                            </td>
                         </tr>
                       ),
                     )}
                   </tbody>
                 </table>
               </div>
+              </>
             )}
           </div>
         </div>

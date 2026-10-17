@@ -176,7 +176,7 @@ const PRICE_COLUMN_NAMES = [
   'قیمت کالا',
   'قیمت محصول',
   'مبلغ',
-  'بهای واحد',
+  'قیمت',
   'Price',
   'price',
   'unitPrice',

@@ -1717,8 +1717,6 @@ p { margin: 4px 0; }
               </div>
 
               <div className="admin-company-logo"><img src="/company-logo.png" alt="لوگو" style="max-height: 54px; max-width: 100%;" /></div>
-                
-              </div>
             </header>
 
             <section className="admin-invoice-title-box">
@@ -2123,8 +2121,6 @@ p { margin: 4px 0; }
                           </div>
 
                           <div className="admin-company-logo"><img src="/company-logo.png" alt="لوگو" style="max-height: 54px; max-width: 100%;" /></div>
-                            
-                          </div>
                         </header>
 
                         <section className="admin-invoice-title-box">

@@ -167,7 +167,7 @@ const getSettings = (settings?: PrintSettings) => ({
   companySubtitle:
     settings?.companySubtitle ||
     'سامانه مدیریت فروش',
-  logoUrl: settings?.logoUrl || '/company-logo.png',
+  logoUrl: settings?.logoUrl || './company-logo.png',
   primaryColor:
     settings?.primaryColor || '#0f766e',
   secondaryColor:

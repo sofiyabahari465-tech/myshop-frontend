@@ -405,9 +405,9 @@ const ReturnRequestsSection = ({
 
   const getAuthHeaders = () => {
     const token =
-      sessionStorage.getItem('token') ||
-      sessionStorage.getItem('accessToken') ||
-      sessionStorage.getItem('authToken') ||
+      localStorage.getItem('token') || sessionStorage.getItem('token') ||
+      localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken') ||
+      localStorage.getItem('authToken') || sessionStorage.getItem('authToken') ||
       '';
 
 

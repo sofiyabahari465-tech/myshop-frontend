@@ -29,9 +29,9 @@ export const useShipments = ({
 
     try {
       const token =
-        sessionStorage.getItem('token') ||
-        sessionStorage.getItem('accessToken') ||
-        sessionStorage.getItem('authToken') ||
+        localStorage.getItem('token') || sessionStorage.getItem('token') ||
+        localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken') ||
+        localStorage.getItem('authToken') || sessionStorage.getItem('authToken') ||
         '';
 
       const response = await axios.get<{

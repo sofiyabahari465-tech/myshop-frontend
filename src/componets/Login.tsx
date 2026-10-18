@@ -238,26 +238,24 @@ const Login: React.FC = () => {
 
         clearStoredSession();
 
+        // ذخیره در sessionStorage (برای تب موقت)
         sessionStorage.setItem('token', token);
-
-        sessionStorage.setItem(
-          'authUser',
-          JSON.stringify(user),
-        );
-
+        sessionStorage.setItem('authUser', JSON.stringify(user));
         sessionStorage.setItem('isLoggedIn', 'true');
         sessionStorage.setItem('userRole', user.role);
+        sessionStorage.setItem('activeSection', 'dashboard');
 
-        sessionStorage.setItem(
-          'activeSection',
-          'dashboard',
-        );
+        // ذخیره در localStorage (برای اپ نصب‌شده - دائمی)
+        localStorage.setItem('token', token);
+        localStorage.setItem('authUser', JSON.stringify(user));
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('userRole', user.role);
+        localStorage.setItem('activeSection', 'dashboard');
 
         if (user.role === 'representative') {
-          sessionStorage.setItem(
-            'representativeId',
-            String(user.representativeId ?? user.id),
-          );
+          const repId = String(user.representativeId ?? user.id);
+          sessionStorage.setItem('representativeId', repId);
+          localStorage.setItem('representativeId', repId);
 
           navigate('/user-dashboard', {
             replace: true,
@@ -267,6 +265,7 @@ const Login: React.FC = () => {
         }
 
         sessionStorage.removeItem('representativeId');
+        localStorage.removeItem('representativeId');
 
         navigate('/', {
           replace: true,

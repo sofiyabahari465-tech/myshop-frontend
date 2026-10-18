@@ -82,7 +82,7 @@ interface ImportRowResult {
 
 // ===== تابع کمکی برای هدر احراز هویت =====
 const buildAuthHeaders = (): Record<string, string> => {
-  const token = sessionStorage.getItem('token');
+  const token = localStorage.getItem('token') || sessionStorage.getItem('token');
   return {
     'Content-Type': 'application/json',
     Accept: 'application/json',

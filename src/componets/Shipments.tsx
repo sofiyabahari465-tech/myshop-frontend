@@ -192,9 +192,9 @@ const COLUMN_ALIASES = {
 
 
 const getAdminToken = () =>
-  sessionStorage.getItem('token') ||
-  sessionStorage.getItem('accessToken') ||
-  sessionStorage.getItem('authToken') ||
+  localStorage.getItem('token') || sessionStorage.getItem('token') ||
+  localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken') ||
+  localStorage.getItem('authToken') || sessionStorage.getItem('authToken') ||
   '';
 
 

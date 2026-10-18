@@ -149,10 +149,10 @@ const REPRESENTATIVE_SECTIONS: Section[] = [
 ];
 
 const getSavedSection = (): Section => {
+  // اول از localStorage (دائمی) چک کن
   const savedSection =
-    sessionStorage.getItem(
-      'activeSection',
-    );
+    localStorage.getItem('activeSection') ||
+    sessionStorage.getItem('activeSection');
 
   const allSections = [
     ...ADMIN_SECTIONS,
@@ -173,10 +173,10 @@ const getSavedSection = (): Section => {
 
 const getAuthUser = (): AuthUser | null => {
   try {
+    // اول از localStorage (دائمی) چک کن
     const raw =
-      sessionStorage.getItem(
-        'authUser',
-      );
+      localStorage.getItem('authUser') ||
+      sessionStorage.getItem('authUser');
 
     if (!raw) {
       return null;
@@ -199,6 +199,7 @@ const getAuthRole = (): AuthRole | null => {
   }
 
   const savedRole =
+    localStorage.getItem('userRole') ||
     sessionStorage.getItem('userRole');
 
   if (savedRole === 'admin') {

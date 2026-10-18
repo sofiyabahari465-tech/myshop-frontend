@@ -83,7 +83,12 @@ ReactDOM.createRoot(
             <Route path="/user-dashboard" element={<App />} />
             <Route
               path="*"
-              element={<Navigate to="/login" replace />}
+              element={
+                // اگه لاگین کرده، به پنل ببر، وگرنه به لاگین
+                (localStorage.getItem('isLoggedIn') || sessionStorage.getItem('isLoggedIn'))
+                  ? <Navigate to="/" replace />
+                  : <Navigate to="/login" replace />
+              }
             />
           </Routes>
         </Suspense>

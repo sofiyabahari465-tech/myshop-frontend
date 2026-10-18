@@ -5,7 +5,7 @@ export const representativesData: Representative[] = [
     id: '1',
     code: '1001',
     name: 'علی محمدی',
-    phone: '09123456789',
+    phone: '021-93111021',
     city: 'تهران',
     orders: 145,
     status: 'active',

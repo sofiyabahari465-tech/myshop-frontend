@@ -77,7 +77,7 @@ const DEFAULT_PRINT_SETTINGS: PrintSettings = {
   reportDescription:
     'این گزارش بر اساس اطلاعات ثبت‌شده توسط نمایندگان در سامانه فروش و انبار تهیه شده است.',
   companyAddress: 'آدرس شرکت، شهر، استان',
-  companyPhone: '۰۲۱-۱۲۳۴۵۶۷۸',
+  companyPhone: '۰۲۱-۹۳۱۱۱۰۲۱',
   companyWebsite: 'www.example.com',
   reportNumber: '',
   preparedBy: '',
@@ -1716,8 +1716,8 @@ p { margin: 4px 0; }
                 </p>
               </div>
 
-              <div className="admin-company-logo">
-                {(printSettings.companyName || 'ش').slice(0, 1)}
+              <div className="admin-company-logo"><img src="/company-logo.png" alt="لوگو" style="max-height: 54px; max-width: 100%;" /></div>
+                
               </div>
             </header>
 
@@ -2122,8 +2122,8 @@ p { margin: 4px 0; }
                             </p>
                           </div>
 
-                          <div className="admin-company-logo">
-                            {(printSettings.companyName || 'ش').slice(0, 1)}
+                          <div className="admin-company-logo"><img src="/company-logo.png" alt="لوگو" style="max-height: 54px; max-width: 100%;" /></div>
+                            
                           </div>
                         </header>
 

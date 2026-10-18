@@ -167,7 +167,7 @@ const getSettings = (settings?: PrintSettings) => ({
   companySubtitle:
     settings?.companySubtitle ||
     'سامانه مدیریت فروش',
-  logoUrl: settings?.logoUrl || '',
+  logoUrl: settings?.logoUrl || '/company-logo.png',
   primaryColor:
     settings?.primaryColor || '#0f766e',
   secondaryColor:
@@ -974,7 +974,7 @@ const PrintContent = ({
 
           <div className="print-info-row">
             <span>تلفن شرکت:</span>
-            <strong>09123456789</strong>
+            <strong>021-93111021</strong>
           </div>
         </div>
 

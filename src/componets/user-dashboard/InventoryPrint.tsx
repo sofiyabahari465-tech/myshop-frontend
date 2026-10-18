@@ -1068,9 +1068,9 @@ const InventoryPrint = ({
         <header className="inventory-print-header">
           <div className="inventory-print-company">
             <div className="inventory-print-logo-box">
-              {settings.companyLogoSrc ? (
+              {(settings.companyLogoSrc || '/company-logo.png') ? (
                 <img
-                  src={settings.companyLogoSrc}
+                  src={settings.companyLogoSrc || '/company-logo.png'}
                   alt="لوگوی شرکت"
                   className="inventory-print-logo"
                 />
@@ -1164,7 +1164,7 @@ const InventoryPrint = ({
 
             <div className="inventory-print-info-row">
               <span>تلفن شرکت:</span>
-              <strong>09123456789</strong>
+              <strong>021-93111021</strong>
             </div>
           </div>
 

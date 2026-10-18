@@ -1,48 +1,21 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
   <defs>
     <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#06b6d4"/>
       <stop offset="50%" stop-color="#3b82f6"/>
       <stop offset="100%" stop-color="#a855f7"/>
     </linearGradient>
-    <linearGradient id="letter" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#ffffff"/>
-      <stop offset="100%" stop-color="#e0e7ff"/>
-    </linearGradient>
-    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
-      <feGaussianBlur in="SourceAlpha" stdDeviation="12"/>
-      <feOffset dx="0" dy="8" result="offsetblur"/>
-      <feFlood flood-color="#000" flood-opacity="0.4"/>
-      <feComposite in2="offsetblur" operator="in"/>
-      <feMerge>
-        <feMergeNode/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
   </defs>
-
-  <!-- دایره با گرادیان - بدون پس‌زمینه مربعی -->
-  <circle cx="256" cy="256" r="256" fill="url(#bg)" filter="url(#shadow)"/>
-
-  <!-- حلقه تزئینی داخلی -->
-  <circle cx="256" cy="256" r="220" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="3"/>
-  <circle cx="256" cy="256" r="200" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
-
-  <!-- نماد مهر (ستاره درون دایره) -->
-  <g transform="translate(256, 256)">
-    <!-- ستاره مرکزی -->
+  <!-- Full colored background (no transparency) -->
+  <rect width="256" height="256" fill="#0f172a" rx="0"/>
+  <circle cx="128" cy="128" r="128" fill="url(#bg)"/>
+  <!-- Star icon (stamp symbol) -->
+  <g transform="translate(128, 128)">
     <polygon
-      points="0,-130 38,-40 130,-40 56,15 80,105 0,55 -80,105 -56,15 -130,-40 -38,-40"
-      fill="url(#letter)"
+      points="0,-65 19,-20 65,-20 28,8 40,53 0,28 -40,53 -28,8 -65,-20 -19,-20"
+      fill="#ffffff"
       opacity="0.95"
     />
-    <!-- نقطه مرکزی -->
-    <circle cx="0" cy="0" r="15" fill="url(#bg)" opacity="0.6"/>
+    <circle cx="0" cy="0" r="8" fill="url(#bg)" opacity="0.6"/>
   </g>
-
-  <!-- نقطه‌های تزئینی -->
-  <circle cx="256" cy="60" r="6" fill="#ffffff" opacity="0.7"/>
-  <circle cx="452" cy="256" r="4" fill="#ffffff" opacity="0.5"/>
-  <circle cx="60" cy="256" r="4" fill="#ffffff" opacity="0.5"/>
-  <circle cx="256" cy="452" r="6" fill="#ffffff" opacity="0.7"/>
 </svg>

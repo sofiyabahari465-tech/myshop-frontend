@@ -54,18 +54,6 @@ const Navbar: React.FC<Props> = ({
     <nav className="sticky top-0 z-40 border-b border-gray-200 bg-white/80 shadow-sm backdrop-blur-xl transition-colors dark:border-gray-700 dark:bg-gray-900/80">
       <div className="flex items-center justify-between gap-3 px-3 py-3 sm:px-4 md:px-6 md:py-4">
         <div className="flex min-w-0 items-center gap-2 sm:gap-3">
-          <button
-            type="button"
-            className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-600 transition-all hover:border-purple-500 hover:bg-purple-50 hover:text-purple-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:border-purple-500 dark:hover:bg-purple-500/10 dark:hover:text-purple-400"
-            title="اعلان‌ها"
-          >
-            <Bell className="h-5 w-5" />
-
-            <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white shadow-sm animate-pulse">
-              3
-            </span>
-          </button>
-
           <div
             className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 px-3 py-2 text-xs font-black text-white shadow-sm shadow-cyan-500/20 sm:px-4 sm:text-sm"
             title={

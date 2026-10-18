@@ -60,7 +60,7 @@ const DEFAULT_PRINT_TEMPLATE: PrintTemplateSettings = {
   companyName: 'نام شرکت شما',
   companyTagline:
     'سامانه مدیریت نمایندگی و انبار',
-  companyLogoSrc: './company-logo.png',
+  companyLogoSrc: '../company-logo.png',
   reportTitle:
     'گزارش موجودی انبار نمایندگی',
   footerText:
@@ -1088,7 +1088,7 @@ const InventorySection = ({
                         event.target.value,
                       )
                     }
-                    placeholder="./company-logo.png"
+                    placeholder="../company-logo.png"
                     className="mt-2 min-h-11 w-full rounded-xl border border-slate-300 bg-white px-3 text-left text-sm dark:border-slate-600 dark:bg-slate-800 dark:text-white"
                   />
                 </label>

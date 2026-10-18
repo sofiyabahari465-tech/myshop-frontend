@@ -1068,9 +1068,9 @@ const InventoryPrint = ({
         <header className="inventory-print-header">
           <div className="inventory-print-company">
             <div className="inventory-print-logo-box">
-              {(settings.companyLogoSrc || './company-logo.png') ? (
+              {(settings.companyLogoSrc || '../company-logo.png') ? (
                 <img
-                  src={settings.companyLogoSrc || './company-logo.png'}
+                  src={settings.companyLogoSrc || '../company-logo.png'}
                   alt="لوگوی شرکت"
                   className="inventory-print-logo"
                 />

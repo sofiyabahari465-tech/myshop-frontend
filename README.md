@@ -1,75 +1,163 @@
-# React + TypeScript + Vite
+<div align="center">
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<img src="readme-logo.png" alt="MEHR Holding Logo" width="200" />
 
-Currently, two official plugins are available:
+# 🏢 پنل مدیریت نمایندگی یدک مهر
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+### سامانه جامع مدیریت نمایندگی، انبار و فروش
 
-## React Compiler
+[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-GitHub_Pages-blue?style=for-the-badge)](https://sofiyabahari465-tech.github.io/myshop-panel/)
+[![Backend](https://img.shields.io/badge/⚙️_Backend-Render-green?style=for-the-badge)](https://myshop-backend-8nu7.onrender.com/api/health)
+[![License](https://img.shields.io/badge/📜_License-MIT-yellow?style=for-the-badge)]()
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+</div>
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 📋 معرفی
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+این پروژه یک **پنل مدیریت کامل** برای شرکت **بازرگانی مهر امین (MEHR Holding)** است که شامل مدیریت نمایندگان، انبار، ارسال بار، اعلام فروش، گارانتی و پشتیبانی می‌باشد.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+---
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## ✨ ویژگی‌ها
 
+### 🔐 پنل ادمین
+- 📊 **داشبورد مدیریتی** با آمار کامل
+- 👥 **مدیریت نمایندگان** (افزودن، ویرایش، حذف)
+- 📦 **مدیریت انبار** همه نمایندگان
+- 🚚 **ارسال بار** با آپلود اکسل
+- 📈 **گزارش‌های فروش** با چاپ حرفه‌ای
+- ↩️ **بررسی درخواست‌های مرجوعی**
+- 🛡️ **مدیریت گارانتی** با ارسال پیامک خودکار
+- 🎫 **مدیریت درخواست‌های پشتیبانی**
+
+### 🏬 پنل نماینده
+- 📊 **داشبورد اختصاصی** با آمار شخصی
+- 📦 **مدیریت انبار** شخصی با آپلود اکسل
+- 🚚 **مشاهده بارهای ارسالی** با رهگیری وضعیت
+- 📈 **ثبت اعلام فروش** در روزهای مجاز
+- ↩️ **ثبت درخواست مرجوعی**
+- 🛡️ **ثبت درخواست گارانتی** با عکس
+- 🎫 **درخواست پشتیبانی**
+
+---
+
+## 🛠 تکنولوژی‌ها
+
+<div align="center">
+
+| Frontend | Backend | Database | Hosting |
+|----------|---------|----------|---------|
+| React 19 | Node.js | MongoDB | GitHub Pages |
+| TypeScript | Express.js | Mongoose | Render |
+| Vite 8 | JWT Auth | Atlas | PWA |
+| Tailwind CSS 4 | Payamito SMS | | |
+
+</div>
+
+---
+
+## 📱 PWA (وب‌اپلیکیشن)
+
+این پروژه به‌صورت **PWA** ساخته شده و قابل نصب روی موبایل و دسکتاپ است.
+
+- ✅ آفلاین کار می‌کند
+- ✅ آیکون اختصاصی (MEHR Holding)
+- ✅ نصب روی صفحه اصلی موبایل
+- ✅ تجربه کاربری شبیه اپلیکیشن
+
+---
+
+## 🚀 نصب و راه‌اندازی
+
+### پیش‌نیازها
+- Node.js 18+
+- npm یا yarn
+
+### اجرای محلی
+```bash
+# نصب وابستگی‌ها
+npm install
+
+# اجرای نسخه توسعه
+npm run dev
+
+# ساخت نسخه نهایی
+npm run build
+
+# پیش‌نمایش نسخه نهایی
+npm run preview
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 🔥 امکانات ویژه
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- 📱 **طراحی واکنش‌گرا (Responsive)** - کاملاً سازگار با موبایل
+- 🌙 **حالت تاریک (Dark Mode)** - پشتیبانی کامل
+- 🖨️ **چاپ حرفه‌ای** - گزارش‌های قابل چاپ با لوگوی شرکت
+- 📲 **پیامک خودکار** - ارسال پیامک هنگام تغییر وضعیت بار و تأیید گارانتی
+- 🔐 **احراز هویت JWT** - امنیت بالا با توکن
+- 💾 **ذخیره‌سازی دائمی** - لاگین حفظ می‌شود حتی بعد از بستن مرورگر
+
+---
+
+## 📂 ساختار پروژه
 
 ```
+myshop-panel/
+├── public/
+│   ├── company-logo.png      # لوگوی شرکت
+│   ├── favicon.ico           # آیکون تب
+│   ├── manifest.json        # تنظیمات PWA
+│   └── sw.js                 # Service Worker
+├── src/
+│   ├── componets/            # کامپوننت‌ها
+│   │   ├── Login.tsx
+│   │   ├── Shipments.tsx
+│   │   ├── Warehouse.tsx
+│   │   ├── Representatives.tsx
+│   │   ├── SalesReportsAdminTable.tsx
+│   │   └── user-dashboard/  # پنل نماینده
+│   ├── hooks/                # هوک‌ها
+│   ├── types/                # تایپ‌ها
+│   └── utils/                # ابزارها
+└── vite.config.ts
+```
+
+---
+
+## 📞 اطلاعات تماس
+
+<div align="center">
+
+**بازرگانی مهر امین**
+
+📞 تلفن: 028-33236072
+
+🌐 وب‌سایت: [yadak.co](https://yadak.co)
+
+</div>
+
+---
+
+<div align="center">
+
+### 🌐 لینک‌های مفید
+
+[![Live Site](https://img.shields.io/badge/🌐_سایت-GitHub_Pages-blue)](https://sofiyabahari465-tech.github.io/myshop-panel/)
+[![API](https://img.shields.io/badge/⚙️_API-Render-green)](https://myshop-backend-8nu7.onrender.com/api/health)
+[![GitHub](https://img.shields.io/badge/📂_کد-GitHub-black)](https://github.com/sofiyabahari465-tech/myshop-panel)
+
+</div>
+
+---
+
+<div align="center">
+
+**ساخته شده با ❤️ برای بازرگانی مهر امین**
+
+© 2026 MEHR Holding
+
+</div>

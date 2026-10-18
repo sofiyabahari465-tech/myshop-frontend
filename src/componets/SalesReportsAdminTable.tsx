@@ -77,7 +77,7 @@ const DEFAULT_PRINT_SETTINGS: PrintSettings = {
   reportDescription:
     'این گزارش بر اساس اطلاعات ثبت‌شده توسط نمایندگان در سامانه فروش و انبار تهیه شده است.',
   companyAddress: 'آدرس شرکت، شهر، استان',
-  companyPhone: '۰۲۱-۹۳۱۱۱۰۲۱',
+  companyPhone: '۰۲۸-۳۳۲۳۶۰۷۲',
   companyWebsite: 'www.example.com',
   reportNumber: '',
   preparedBy: '',

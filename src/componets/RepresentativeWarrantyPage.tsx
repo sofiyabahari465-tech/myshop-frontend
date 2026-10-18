@@ -637,7 +637,7 @@ const RepresentativeWarrantyPage: React.FC = () => {
                     onChange={(event) => {
                       setCustomerPhone(event.target.value);
                     }}
-                    placeholder="021-93111021"
+                    placeholder="028-33236072"
                     className="w-full rounded-xl border border-slate-300 bg-white py-3 pr-10 pl-3 text-left text-sm font-medium text-slate-800 outline-none transition-all placeholder:text-slate-400 focus:border-sky-500 focus:ring-4 focus:ring-sky-100"
                   />
                 </div>

@@ -974,7 +974,7 @@ const PrintContent = ({
 
           <div className="print-info-row">
             <span>تلفن شرکت:</span>
-            <strong>021-93111021</strong>
+            <strong>028-33236072</strong>
           </div>
         </div>
 

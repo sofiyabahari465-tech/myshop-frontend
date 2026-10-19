@@ -593,20 +593,149 @@ const SalesReportsAdminTable = ({
   };
 
   const openSingleReportPrint = (report: SalesReportApi) => {
-    setPrintMode('single');
-    setPrintReport(report);
+    const printWindow = window.open('', '_blank', 'width=900,height=700');
+    if (!printWindow) {
+      alert('لطفاً popup blocker را غیرفعال کنید');
+      return;
+    }
 
-    setPrintSettings((currentSettings) => ({
-      ...currentSettings,
-      reportTitle: `گزارش اعلام فروش نمایندگی ${
-        report.representativeName || ''
-      }`,
-      reportDescription:
-        'این گزارش شامل اطلاعات و جزئیات یک اعلام فروش ثبت‌شده توسط نمایندگی است.',
-      reportNumber: getDefaultReportNumber('single', report),
-    }));
+    const today = new Intl.DateTimeFormat('fa-IR-u-ca-persian', {
+      year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit'
+    }).format(new Date());
 
-    setShowPrintPreview(true);
+    const items = Array.isArray(report.items) ? report.items : [];
+    const itemsHtml = items.map((item: SalesReportItem, i: number) => `
+      <tr>
+        <td style="text-align:center;">${i + 1}</td>
+        <td>${item.productName || '—'}</td>
+        <td>${item.brand || '—'}</td>
+        <td style="text-align:center;">${formatFaNumber(item.quantity) || '—'}</td>
+        <td style="text-align:center;">${formatFaNumber(item.unitPrice)} تومان</td>
+        <td style="text-align:center;">${formatFaNumber(item.totalPrice ?? (Number(item.quantity || 0) * Number(item.unitPrice || 0)))} تومان</td>
+      </tr>
+    `).join('');
+
+    printWindow.document.write(`<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>چاپ گزارش فروش - ${report.representativeName || ''}</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" />
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+body { font-family: 'Vazirmatn', Tahoma, Arial, sans-serif; direction: rtl; padding: 20px; background: #fff; color: #111; }
+.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 3px solid #0f766e; padding-bottom: 15px; }
+.logo { display: flex; align-items: center; gap: 15px; }
+.logo img { max-height: 60px; max-width: 200px; }
+.company-info h1 { font-size: 18px; margin: 0; }
+.company-info p { font-size: 12px; color: #666; margin: 2px 0; }
+.report-title { text-align: center; margin: 20px 0; }
+.report-title h2 { font-size: 22px; margin: 0; }
+.report-title p { font-size: 12px; color: #666; margin-top: 5px; }
+.info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+.info-card { border: 1px solid #ddd; border-radius: 8px; padding: 12px 15px; }
+.info-card .label { font-size: 11px; color: #666; margin-bottom: 3px; }
+.info-card .value { font-size: 14px; font-weight: bold; }
+table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+th, td { border: 1px solid #ddd; padding: 8px 10px; font-size: 12px; text-align: right; }
+th { background: #0f766e !important; color: #fff; font-weight: bold; }
+tr:nth-child(even) td { background: #f9fafb; }
+tfoot td { background: #ecfdf5 !important; font-weight: bold; }
+.summary { display: flex; gap: 20px; margin-top: 20px; justify-content: space-around; }
+.summary-card { border: 1px solid #ddd; border-radius: 8px; padding: 15px 25px; text-align: center; min-width: 150px; }
+.summary-card .label { font-size: 11px; color: #666; }
+.summary-card .value { font-size: 20px; font-weight: bold; margin-top: 5px; }
+.footer { margin-top: 40px; text-align: center; font-size: 11px; color: #999; border-top: 1px solid #eee; padding-top: 10px; }
+@media print { @page { size: A4 portrait; margin: 10mm; } body { padding: 0; } }
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="logo">
+    <img src="https://sofiyabahari465-tech.github.io/myshop-panel/company-logo.png" alt="لوگو" onerror="this.style.display='none'" />
+    <div class="company-info">
+      <h1>بازرگانی مهر امین</h1>
+      <p>سامانه مدیریت نمایندگی و انبار</p>
+      <p>تلفن: 028-33236072</p>
+    </div>
+  </div>
+  <div style="font-size: 12px; text-align: left;">
+    <p><strong>تاریخ چاپ:</strong> ${today}</p>
+  </div>
+</div>
+
+<div class="report-title">
+  <h2>📋 گزارش اعلام فروش</h2>
+  <p>گزارش تک‌گزارش فروش نمایندگی ${report.representativeName || ''}</p>
+</div>
+
+<div class="info-grid">
+  <div class="info-card">
+    <div class="label">نام نمایندگی</div>
+    <div class="value">${report.representativeName || '—'}</div>
+  </div>
+  <div class="info-card">
+    <div class="label">کد نمایندگی</div>
+    <div class="value">${report.representativeCode || '—'}</div>
+  </div>
+  <div class="info-card">
+    <div class="label">شهر</div>
+    <div class="value">${report.representativeCity || '—'}</div>
+  </div>
+  <div class="info-card">
+    <div class="label">تاریخ ثبت</div>
+    <div class="value">${report.saleDate || formatPersianDate(report.createdAt) || '—'}</div>
+  </div>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width: 5%;">ردیف</th>
+      <th style="width: 35%;">عنوان</th>
+      <th style="width: 15%;">برند</th>
+      <th style="width: 10%;">تعداد</th>
+      <th style="width: 15%;">قیمت</th>
+      <th style="width: 20%;">مجموع</th>
+    </tr>
+  </thead>
+  <tbody>
+    ${itemsHtml}
+  </tbody>
+  <tfoot>
+    <tr>
+      <td colspan="3" style="text-align:left;"><strong>جمع کل:</strong></td>
+      <td style="text-align:center;"><strong>${formatFaNumber(report.totalItems ?? items.length)}</strong></td>
+      <td></td>
+      <td style="text-align:center;"><strong>${formatToman(report.totalAmount)}</strong></td>
+    </tr>
+  </tfoot>
+</table>
+
+<div class="summary">
+  <div class="summary-card">
+    <div class="label">تعداد اقلام</div>
+    <div class="value">${formatFaNumber(report.totalItems ?? items.length)}</div>
+  </div>
+  <div class="summary-card">
+    <div class="label">مجموع فروش</div>
+    <div class="value">${formatFaNumber(report.totalAmount)}<br><span style="font-size:12px;">تومان</span></div>
+  </div>
+</div>
+
+<div class="footer">
+  <p>این گزارش به‌صورت خودکار از سامانه مدیریت نمایندگی و انبار تهیه شده است.</p>
+  <p>بازرگانی مهر امین - 1405</p>
+</div>
+
+</body>
+</html>`);
+    printWindow.document.close();
+    printWindow.focus();
+    setTimeout(() => {
+      printWindow.print();
+    }, 1000);
   };
 
   const closePrintPreview = () => {

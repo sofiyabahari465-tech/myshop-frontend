@@ -615,129 +615,147 @@ const SalesReportsAdminTable = ({
   };
 
   const handlePrint = () => {
-    // صبر کن محتوای چاپ رندر بشه، بعد چاپ کن
-    setTimeout(() => {
-      const element = document.querySelector(
-        '.admin-print-only',
-      ) as HTMLElement;
-      if (!element) {
-        console.warn('محتوای چاپ پیدا نشد');
-        window.print();
-        return;
-      }
+    const printWindow = window.open('', '_blank', 'width=900,height=700');
+    if (!printWindow) {
+      alert('لطفاً popup blocker را غیرفعال کنید');
+      return;
+    }
 
-      // اطمینان از اینکه محتوا دیده میشه
-      const computedStyle = window.getComputedStyle(element);
-      if (computedStyle.display === 'none' || computedStyle.visibility === 'hidden') {
-        console.warn('محتوای چاپ مخفی است');
-      }
+    const today = new Intl.DateTimeFormat('fa-IR-u-ca-persian', {
+      year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit'
+    }).format(new Date());
 
-      // حذف iframe قبلی
-      const oldIframe = document.getElementById('print-iframe');
-      if (oldIframe && oldIframe.parentNode) {
-        document.body.removeChild(oldIframe);
-      }
+    const rowsHtml = reports.map((report, index) => {
+      const items = Array.isArray(report.items) ? report.items : [];
+      const itemsHtml = items.map((item: SalesReportItem) => `
+        <tr>
+          <td style="text-align:center;">${index + 1}</td>
+          <td>${item.productName || '—'}</td>
+          <td style="text-align:center;">${formatNumber(item.quantity) || '—'}</td>
+          <td style="text-align:center;">${formatNumber(item.unitPrice)} تومان</td>
+          <td style="text-align:center;">${formatNumber(item.totalPrice ?? (Number(item.quantity || 0) * Number(item.unitPrice || 0)))} تومان</td>
+        </tr>
+      `).join('');
 
-      // ساخت iframe مخفی
-      const iframe = document.createElement('iframe');
-      iframe.id = 'print-iframe';
-      iframe.style.position = 'fixed';
-      iframe.style.right = '0';
-      iframe.style.bottom = '0';
-      iframe.style.width = '0';
-      iframe.style.height = '0';
-      iframe.style.border = '0';
-      iframe.style.overflow = 'hidden';
-      iframe.setAttribute('aria-hidden', 'true');
-      iframe.title = 'چاپ گزارش فروش';
+      return `
+        <div class="report-card">
+          <div class="report-card-header">
+            <h3>گزارش فروش ${index + 1} - ${report.representativeName || '—'}</h3>
+            <p>کد نمایندگی: ${report.representativeCode || '—'} | شهر: ${report.representativeCity || '—'}</p>
+            <p>تاریخ: ${report.saleDate || formatPersianDate(report.createdAt) || '—'}</p>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 5%;">ردیف</th>
+                <th style="width: 50%;">عنوان</th>
+                <th style="width: 15%;">تعداد</th>
+                <th style="width: 15%;">قیمت</th>
+                <th style="width: 15%;">مجموع</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${itemsHtml}
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="3" style="text-align:left;"><strong>جمع کل:</strong></td>
+                <td colspan="2" style="text-align:center;"><strong>${formatToman(report.totalAmount)} تومان</strong></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      `;
+    }).join('');
 
-      document.body.appendChild(iframe);
+    const totalAmount = reports.reduce((sum, r) => sum + (Number(r.totalAmount) || 0), 0);
+    const totalItems = reports.reduce((sum, r) => sum + (Number(r.totalItems) || r.items?.length || 0), 0);
 
-      const doc = iframe.contentWindow?.document || iframe.contentDocument;
-      if (!doc) {
-        if (iframe.parentNode) document.body.removeChild(iframe);
-        window.print();
-        return;
-      }
-
-      // استخراج فقط استایل‌های مربوط به چاپ از صفحه اصلی
-      const allStyles = Array.from(document.querySelectorAll('style, link[rel="stylesheet"]'))
-        .map((node) => node.outerHTML)
-        .join('\n');
-
-      doc.open();
-      doc.write(`<!DOCTYPE html>
+    printWindow.document.write(`<!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>چاپ گزارش فروش</title>
-<link rel="preconnect" href="https://cdn.jsdelivr.net" />
+<title>چاپ گزارش اعلام فروش</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" />
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-html, body { font-family: 'Vazirmatn', Tahoma, Arial, sans-serif !important; direction: rtl; padding: 15px; background: #ffffff !important; color: #111827; width: 100%; max-width: 100%; visibility: visible !important; opacity: 1 !important; display: block !important; }
-body * { visibility: visible !important; opacity: 1 !important; }
-table { width: 100% !important; max-width: 100% !important; border-collapse: collapse; margin: 10px 0; table-layout: fixed; display: table !important; }
-thead, tbody, tfoot { display: table-row-group !important; }
-tr { display: table-row !important; page-break-inside: avoid; page-break-after: auto; }
-th, td { border: 1px solid #6b7280; padding: 6px 8px; text-align: right; font-size: 11px; word-wrap: break-word; word-break: break-word; overflow-wrap: break-word; display: table-cell !important; visibility: visible !important; }
-th { background: #f3f4f6 !important; font-weight: bold; color: #111827; }
-img { max-width: 100%; height: auto; }
-h1, h2, h3, h4, h5, h6 { margin: 8px 0; color: #111827; display: block !important; }
-p, span, div { color: #111827; }
-p { margin: 4px 0; }
-@media print {
-  @page { size: A4 portrait; margin: 8mm; }
-  html, body { padding: 0 !important; margin: 0 !important; width: 100% !important; max-width: 100% !important; visibility: visible !important; opacity: 1 !important; }
-  body * { visibility: visible !important; opacity: 1 !important; }
-  table { page-break-inside: auto; }
-  tr { page-break-inside: avoid; page-break-after: auto; }
-  thead { display: table-header-group; }
-}
+body { font-family: 'Vazirmatn', Tahoma, Arial, sans-serif; direction: rtl; padding: 20px; background: #fff; color: #111; }
+.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 3px solid #0f766e; padding-bottom: 15px; }
+.logo { display: flex; align-items: center; gap: 15px; }
+.logo img { max-height: 60px; max-width: 200px; }
+.company-info h1 { font-size: 18px; margin: 0; }
+.company-info p { font-size: 12px; color: #666; margin: 2px 0; }
+.report-title { text-align: center; margin: 20px 0; }
+.report-title h2 { font-size: 22px; margin: 0; }
+.report-title p { font-size: 12px; color: #666; margin-top: 5px; }
+.report-card { margin-bottom: 30px; border: 2px solid #e5e7eb; border-radius: 10px; overflow: hidden; page-break-inside: avoid; }
+.report-card-header { background: #f0fdfa; padding: 15px; border-bottom: 2px solid #0f766e; }
+.report-card-header h3 { font-size: 16px; margin: 0 0 5px 0; color: #0f766e; }
+.report-card-header p { font-size: 12px; color: #666; margin: 2px 0; }
+table { width: 100%; border-collapse: collapse; }
+th, td { border: 1px solid #ddd; padding: 8px 10px; font-size: 12px; text-align: right; }
+th { background: #0f766e !important; color: #fff; font-weight: bold; }
+tr:nth-child(even) td { background: #f9fafb; }
+tfoot td { background: #ecfdf5 !important; font-weight: bold; }
+.summary { display: flex; gap: 20px; margin-top: 20px; justify-content: space-around; }
+.summary-card { border: 1px solid #ddd; border-radius: 8px; padding: 15px 25px; text-align: center; min-width: 150px; }
+.summary-card .label { font-size: 11px; color: #666; }
+.summary-card .value { font-size: 20px; font-weight: bold; margin-top: 5px; }
+.footer { margin-top: 40px; text-align: center; font-size: 11px; color: #999; border-top: 1px solid #eee; padding-top: 10px; }
+@media print { @page { size: A4 portrait; margin: 10mm; } body { padding: 0; } }
 </style>
 </head>
-<body>${element.outerHTML}</body>
+<body>
+<div class="header">
+  <div class="logo">
+    <img src="https://sofiyabahari465-tech.github.io/myshop-panel/company-logo.png" alt="لوگو" onerror="this.style.display='none'" />
+    <div class="company-info">
+      <h1>بازرگانی مهر امین</h1>
+      <p>سامانه مدیریت نمایندگی و انبار</p>
+      <p>تلفن: 028-33236072</p>
+    </div>
+  </div>
+  <div style="font-size: 12px; text-align: left;">
+    <p><strong>تاریخ چاپ:</strong> ${today}</p>
+    <p><strong>تعداد گزارش‌ها:</strong> ${reports.length}</p>
+  </div>
+</div>
+
+<div class="report-title">
+  <h2>📋 گزارش جامع اعلام فروش نمایندگان</h2>
+  <p>گزارش کامل اعلام فروش‌های ثبت‌شده توسط نمایندگان</p>
+</div>
+
+${rowsHtml}
+
+<div class="summary">
+  <div class="summary-card">
+    <div class="label">تعداد گزارش‌ها</div>
+    <div class="value">${reports.length}</div>
+  </div>
+  <div class="summary-card">
+    <div class="label">تعداد کل اقلام</div>
+    <div class="value">${totalItems}</div>
+  </div>
+  <div class="summary-card">
+    <div class="label">مجموع کل فروش</div>
+    <div class="value">${formatNumber(totalAmount)}<br><span style="font-size:12px;">تومان</span></div>
+  </div>
+</div>
+
+<div class="footer">
+  <p>این گزارش به‌صورت خودکار از سامانه مدیریت نمایندگی و انبار تهیه شده است.</p>
+  <p>بازرگانی مهر امین - 1405</p>
+</div>
+
+</body>
 </html>`);
-      doc.close();
-
-      const triggerPrint = () => {
-        try {
-          iframe.contentWindow?.focus();
-          setTimeout(() => {
-            try {
-              iframe.contentWindow?.print();
-            } catch (e) {
-              console.error('خطا در چاپ:', e);
-            }
-            setTimeout(() => {
-              if (iframe.parentNode) {
-                document.body.removeChild(iframe);
-              }
-            }, 1000);
-          }, 500);
-        } catch (e) {
-          console.error('خطا در چاپ:', e);
-          if (iframe.parentNode) {
-            document.body.removeChild(iframe);
-          }
-        }
-      };
-
-      if (iframe.contentWindow?.document?.readyState === 'complete') {
-        triggerPrint();
-      } else {
-        iframe.onload = triggerPrint;
-        setTimeout(() => {
-          if (
-            iframe.parentNode &&
-            iframe.contentWindow?.document?.readyState === 'complete'
-          ) {
-            triggerPrint();
-          }
-        }, 3000);
-      }
-    }, 200); // 200ms صبر برای رندر محتوا
+    printWindow.document.close();
+    printWindow.focus();
+    setTimeout(() => {
+      printWindow.print();
+    }, 1000);
   };
 
   if (loading) {

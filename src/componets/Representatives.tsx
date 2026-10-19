@@ -15,6 +15,7 @@ import {
   MapPin,
   Pencil,
   Phone,
+  Printer,
   Trash2,
   User,
   UserPlus,
@@ -972,6 +973,128 @@ const Representatives: React.FC<Props> = ({
     }
   };
 
+  const handlePrintRepresentatives = () => {
+    const printWindow = window.open('', '_blank', 'width=900,height=700');
+    if (!printWindow) {
+      alert('لطفاً popup blocker را غیرفعال کنید');
+      return;
+    }
+
+    const today = new Intl.DateTimeFormat('fa-IR-u-ca-persian', {
+      year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit'
+    }).format(new Date());
+
+    const rowsHtml = representatives.map((rep, index) => `
+      <tr>
+        <td style="text-align:center;">${index + 1}</td>
+        <td style="text-align:center;">${rep.code || '—'}</td>
+        <td>${rep.name || '—'}</td>
+        <td>${rep.province || '—'}</td>
+        <td>${rep.city || '—'}</td>
+        <td style="text-align:center;" dir="ltr">${rep.phone || '—'}</td>
+        <td style="text-align:center;">${rep.storeItemsCount || 0}</td>
+        <td style="text-align:center;">${rep.status === 'inactive' ? 'غیرفعال' : 'فعال'}</td>
+      </tr>
+    `).join('');
+
+    printWindow.document.write(`<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>چاپ لیست نمایندگان</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" />
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+body { font-family: 'Vazirmatn', Tahoma, Arial, sans-serif; direction: rtl; padding: 20px; background: #fff; color: #111; }
+.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 3px solid #0f766e; padding-bottom: 15px; }
+.logo { display: flex; align-items: center; gap: 15px; }
+.logo img { max-height: 60px; max-width: 200px; }
+.company-info h1 { font-size: 18px; margin: 0; }
+.company-info p { font-size: 12px; color: #666; margin: 2px 0; }
+.report-title { text-align: center; margin: 20px 0; }
+.report-title h2 { font-size: 22px; margin: 0; }
+.report-title p { font-size: 12px; color: #666; margin-top: 5px; }
+table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+th, td { border: 1px solid #333; padding: 8px 10px; font-size: 12px; text-align: right; }
+th { background: #0f766e !important; color: #fff; font-weight: bold; }
+tr:nth-child(even) td { background: #f9fafb; }
+.summary { display: flex; gap: 20px; margin-top: 20px; justify-content: space-around; }
+.summary-card { border: 1px solid #ddd; border-radius: 8px; padding: 15px 25px; text-align: center; min-width: 150px; }
+.summary-card .label { font-size: 11px; color: #666; }
+.summary-card .value { font-size: 20px; font-weight: bold; margin-top: 5px; }
+.footer { margin-top: 40px; text-align: center; font-size: 11px; color: #999; border-top: 1px solid #eee; padding-top: 10px; }
+@media print { @page { size: A4 portrait; margin: 10mm; } body { padding: 0; } }
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="logo">
+    <img src="https://sofiyabahari465-tech.github.io/myshop-panel/company-logo.png" alt="لوگو" onerror="this.style.display='none'" />
+    <div class="company-info">
+      <h1>بازرگانی مهر امین</h1>
+      <p>سامانه مدیریت نمایندگی و انبار</p>
+      <p>تلفن: 028-33236072</p>
+    </div>
+  </div>
+  <div style="font-size: 12px; text-align: left;">
+    <p><strong>تاریخ چاپ:</strong> ${today}</p>
+    <p><strong>تعداد نمایندگان:</strong> ${representatives.length}</p>
+  </div>
+</div>
+
+<div class="report-title">
+  <h2>📋 گزارش لیست نمایندگان</h2>
+  <p>لیست کامل نمایندگان ثبت‌شده در سامانه</p>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width: 5%;">ردیف</th>
+      <th style="width: 10%;">کد</th>
+      <th style="width: 20%;">نام نماینده</th>
+      <th style="width: 12%;">استان</th>
+      <th style="width: 12%;">شهر</th>
+      <th style="width: 15%;">تلفن</th>
+      <th style="width: 10%;">تعداد کالا</th>
+      <th style="width: 10%;">وضعیت</th>
+    </tr>
+  </thead>
+  <tbody>
+    ${rowsHtml}
+  </tbody>
+</table>
+
+<div class="summary">
+  <div class="summary-card">
+    <div class="label">تعداد کل نمایندگان</div>
+    <div class="value">${representatives.length}</div>
+  </div>
+  <div class="summary-card">
+    <div class="label">نمایندگان فعال</div>
+    <div class="value">${representatives.filter(r => r.status !== 'inactive').length}</div>
+  </div>
+  <div class="summary-card">
+    <div class="label">نمایندگان غیرفعال</div>
+    <div class="value">${representatives.filter(r => r.status === 'inactive').length}</div>
+  </div>
+</div>
+
+<div class="footer">
+  <p>این گزارش به‌صورت خودکار از سامانه مدیریت نمایندگی و انبار تهیه شده است.</p>
+  <p>بازرگانی مهر امین - 1405</p>
+</div>
+
+</body>
+</html>`);
+    printWindow.document.close();
+    printWindow.focus();
+    setTimeout(() => {
+      printWindow.print();
+    }, 1000);
+  };
+
   const openModal = (
     representative?: Representative,
   ) => {
@@ -1302,14 +1425,24 @@ const Representatives: React.FC<Props> = ({
         </div>
 
         {userRole === 'admin' ? (
-          <button
-            type="button"
-            onClick={() => openModal()}
-            className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-500 px-4 py-2.5 text-sm font-bold text-white shadow-lg shadow-blue-500/30 transition-all hover:scale-105 hover:shadow-blue-500/50 active:scale-95"
-          >
-            <UserPlus className="h-4 w-4" />
-            افزودن نماینده
-          </button>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={handlePrintRepresentatives}
+              className="flex items-center justify-center gap-2 rounded-xl border border-gray-300 bg-white px-4 py-2.5 text-sm font-bold text-gray-700 transition-all hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
+            >
+              <Printer className="h-4 w-4" />
+              چاپ لیست
+            </button>
+            <button
+              type="button"
+              onClick={() => openModal()}
+              className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-500 px-4 py-2.5 text-sm font-bold text-white shadow-lg shadow-blue-500/30 transition-all hover:scale-105 hover:shadow-blue-500/50 active:scale-95"
+            >
+              <UserPlus className="h-4 w-4" />
+              افزودن نماینده
+            </button>
+          </div>
         ) : null}
       </div>
 

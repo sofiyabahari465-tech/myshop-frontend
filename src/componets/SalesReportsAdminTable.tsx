@@ -631,9 +631,9 @@ const SalesReportsAdminTable = ({
         <tr>
           <td style="text-align:center;">${index + 1}</td>
           <td>${item.productName || '—'}</td>
-          <td style="text-align:center;">${formatNumber(item.quantity) || '—'}</td>
-          <td style="text-align:center;">${formatNumber(item.unitPrice)} تومان</td>
-          <td style="text-align:center;">${formatNumber(item.totalPrice ?? (Number(item.quantity || 0) * Number(item.unitPrice || 0)))} تومان</td>
+          <td style="text-align:center;">${formatFaNumber(item.quantity) || '—'}</td>
+          <td style="text-align:center;">${formatFaNumber(item.unitPrice)} تومان</td>
+          <td style="text-align:center;">${formatFaNumber(item.totalPrice ?? (Number(item.quantity || 0) * Number(item.unitPrice || 0)))} تومان</td>
         </tr>
       `).join('');
 
@@ -740,7 +740,7 @@ ${rowsHtml}
   </div>
   <div class="summary-card">
     <div class="label">مجموع کل فروش</div>
-    <div class="value">${formatNumber(totalAmount)}<br><span style="font-size:12px;">تومان</span></div>
+    <div class="value">${formatFaNumber(totalAmount)}<br><span style="font-size:12px;">تومان</span></div>
   </div>
 </div>
 

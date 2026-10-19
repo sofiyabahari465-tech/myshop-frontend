@@ -1878,6 +1878,34 @@ tr:nth-child(even) td { background: #f9fafb; }
                   <div className="min-w-0">
                     <label className="mb-1 flex items-center gap-1.5 text-xs font-bold text-gray-700 dark:text-gray-300">
                       <MapPin className="h-3.5 w-3.5 text-gray-400" />
+                      استان
+                      <span className="text-red-500">
+                        *
+                      </span>
+                    </label>
+
+                    <input
+                      type="text"
+                      value={formData.province}
+                      onChange={(event) =>
+                        setFormData(
+                          (previous) => ({
+                            ...previous,
+                            province:
+                              event.target.value,
+                          }),
+                        )
+                      }
+                      disabled={isSaving}
+                      className="w-full min-w-0 rounded-xl border border-gray-300 bg-white px-3 py-2 text-sm text-gray-800 outline-none focus:border-blue-500 disabled:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
+                      placeholder="استان"
+                      required
+                    />
+                  </div>
+
+                  <div className="min-w-0">
+                    <label className="mb-1 flex items-center gap-1.5 text-xs font-bold text-gray-700 dark:text-gray-300">
+                      <MapPin className="h-3.5 w-3.5 text-gray-400" />
                       شهر
                       <span className="text-red-500">
                         *
@@ -1905,34 +1933,6 @@ tr:nth-child(even) td { background: #f9fafb; }
                       disabled={isSaving}
                       className="w-full min-w-0 rounded-xl border border-gray-300 bg-white px-3 py-2 text-sm text-gray-800 outline-none focus:border-blue-500 disabled:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
                       placeholder="شهر"
-                      required
-                    />
-                  </div>
-
-                  <div className="min-w-0">
-                    <label className="mb-1 flex items-center gap-1.5 text-xs font-bold text-gray-700 dark:text-gray-300">
-                      <MapPin className="h-3.5 w-3.5 text-gray-400" />
-                      استان
-                      <span className="text-red-500">
-                        *
-                      </span>
-                    </label>
-
-                    <input
-                      type="text"
-                      value={formData.province}
-                      onChange={(event) =>
-                        setFormData(
-                          (previous) => ({
-                            ...previous,
-                            province:
-                              event.target.value,
-                          }),
-                        )
-                      }
-                      disabled={isSaving}
-                      className="w-full min-w-0 rounded-xl border border-gray-300 bg-white px-3 py-2 text-sm text-gray-800 outline-none focus:border-blue-500 disabled:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
-                      placeholder="استان"
                       required
                     />
                   </div>

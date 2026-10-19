@@ -445,33 +445,38 @@ const UserDashboardPage = ({
 
 
 
-  // محاسبه فروش ۳ روز مجاز ماه (روزهای ۱۰، ۲۰، ۳۰)
+  // محاسبه فروش ۳ روز مجاز ماه (روزهای ۱۰، ۲۰، ۳۰ شمسی)
   const salesInAllowedDays = useMemo(() => {
-    const now = new Date();
-    const currentMonth = now.getMonth();
-    const currentYear = now.getFullYear();
+    // ماه و سال شمسی جاری
+    const nowParts = new Intl.DateTimeFormat('en-US-u-ca-persian', {
+      year: 'numeric', month: '2-digit',
+    }).formatToParts(new Date());
 
-
+    const persianYear = nowParts.find(p => p.type === 'year')?.value || '';
+    const persianMonth = nowParts.find(p => p.type === 'month')?.value || '';
+    const currentShamsiMonth = `${persianYear}/${persianMonth}`;
 
     return salesReports
       .filter((report) => {
-        const reportDate = report.createdAt ? new Date(report.createdAt) : null;
-        if (!reportDate) return false;
+        // استفاده از saleDate (تاریخ شمسی) که از سرور میاد
+        const saleDate = String(report.saleDate || '');
+        if (!saleDate) return false;
 
+        // استخراج روز و ماه شمسی از saleDate (مثلا 1405/07/20)
+        const parts = saleDate.split('/');
+        if (parts.length < 3) return false;
 
+        const reportYear = parts[0];
+        const reportMonth = parts[1];
+        const reportDay = parseInt(parts[2], 10);
 
-        const reportDay = reportDate.getDate();
-        const reportMonth = reportDate.getMonth();
-        const reportYear = reportDate.getFullYear();
-
-
-
-        if (reportMonth !== currentMonth || reportYear !== currentYear) {
+        // چک کردن که ماه و سال جاری باشه
+        const reportShamsiMonth = `${reportYear}/${reportMonth}`;
+        if (reportShamsiMonth !== currentShamsiMonth) {
           return false;
         }
 
-
-
+        // چک کردن که روز یکی از ۱۰، ۲۰ یا ۳۰ باشه
         return [10, 20, 30].includes(reportDay);
       })
       .reduce((total, report) => {

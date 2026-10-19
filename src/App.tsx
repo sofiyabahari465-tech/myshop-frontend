@@ -443,6 +443,7 @@ function App() {
       }
 
       const endpoints = [
+        '/sales-from-warehouse/admin/all',
         '/sales-reports',
         '/sale-reports',
         '/sales',

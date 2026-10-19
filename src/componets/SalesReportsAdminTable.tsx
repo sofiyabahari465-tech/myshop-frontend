@@ -28,6 +28,8 @@ type SalesReportItem = {
   productName?: string;
   title?: string;
   name?: string;
+  brand?: string;
+  category?: string;
   quantity?: number | string;
   unitPrice?: number | string;
   price?: number | string;

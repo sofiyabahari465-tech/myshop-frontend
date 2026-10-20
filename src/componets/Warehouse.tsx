@@ -14,6 +14,7 @@ import {
   RefreshCw,
   AlertCircle,
   Loader2,
+  Printer,
 } from 'lucide-react';
 
 import type { Representative } from '../types';
@@ -28,6 +29,11 @@ interface WarehouseProps {
 
 interface WarehouseItem {
   id?: string | number;
+  productName?: unknown;
+  name?: unknown;
+  title?: unknown;
+  brand?: unknown;
+  category?: unknown;
   quantity?: unknown;
   unitPrice?: unknown;
 }
@@ -38,12 +44,20 @@ interface WarehouseResponse {
   message?: string;
   data?: {
     items?: WarehouseItem[];
+    summary?: {
+      itemCount?: number;
+      totalValue?: number;
+      totalQuantity?: number;
+    };
+    updatedAt?: string;
   };
 }
 
 interface InventorySummary {
   itemCount: number;
   totalValue: number;
+  items?: WarehouseItem[];
+  updatedAt?: string;
 }
 
 type StatusFilter = 'all' | 'active' | 'inactive';
@@ -71,6 +85,19 @@ const getNumber = (value: unknown): number => {
 
 const formatNumber = (value: unknown): string => {
   return getNumber(value).toLocaleString('fa-IR');
+};
+
+const formatFa = (value: unknown): string => {
+  return getNumber(value).toLocaleString('fa-IR');
+};
+
+const escapeHtml = (value: unknown): string => {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 };
 
 const normalizeSearch = (value: unknown): string => {
@@ -185,6 +212,500 @@ const Warehouse: React.FC<WarehouseProps> = ({
     setReloadKey((current) => current + 1);
   }, []);
 
+  const getCompanyLogoUrl = () => {
+    return `https://sofiyabahari465-tech.github.io/myshop-panel/company-logo.png`;
+  };
+
+  const getPersianNow = () => {
+    try {
+      return new Intl.DateTimeFormat('fa-IR-u-ca-persian', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+      }).format(new Date());
+    } catch {
+      return new Date().toLocaleString('fa-IR');
+    }
+  };
+
+  const formatTomanInline = (value: number): string => {
+    return `\${formatNumber(value)} تومان`;
+  };
+
+  // ===== چاپ کلی: چاپ جدول خلاصهٔ همهٔ انبارها =====
+  const handlePrintAllWarehouses = () => {
+    if (loading) {
+      window.alert('لطفاً صبر کنید تا دریافت انبارها کامل شود.');
+      return;
+    }
+
+    if (!filteredRepresentatives.length) {
+      window.alert('نماینده‌ای برای چاپ موجود نیست.');
+      return;
+    }
+
+    const printWindow = window.open(
+      '',
+      '_blank',
+      'width=1000,height=720',
+    );
+
+    if (!printWindow) {
+      window.alert(
+        'پنجرهٔ چاپ باز نشد. لطفاً popup blocker را غیرفعال کنید.',
+      );
+      return;
+    }
+
+    const today = getPersianNow();
+    const logoUrl = getCompanyLogoUrl();
+
+    const repsWithSummary = filteredRepresentatives.map((rep) => {
+      const id = String(rep.id);
+      const summary = summaries[id];
+      const error = errors[id];
+      return {
+        id,
+        name: rep.name || 'بدون نام',
+        code: rep.code || '-',
+        city: rep.city || '-',
+        phone: rep.phone || '-',
+        status:
+          rep.status !== 'inactive' ? 'فعال' : 'غیرفعال',
+        itemCount: summary?.itemCount ?? 0,
+        totalValue: summary?.totalValue ?? 0,
+        hasError: Boolean(error) || !summary,
+      };
+    });
+
+    const rows = repsWithSummary
+      .map((rep, idx) => {
+        return `
+        <tr>
+          <td style="text-align:center;">\${idx + 1}</td>
+          <td>\${escapeHtml(rep.name)}<div style="font-size:10px;color:#6b7280;margin-top:2px;" dir="ltr">\${escapeHtml(rep.phone)}</div></td>
+          <td style="text-align:center;">\${escapeHtml(rep.code)}</td>
+          <td style="text-align:center;">\${escapeHtml(rep.city)}</td>
+          <td style="text-align:center;">\${rep.status}</td>
+          <td style="text-align:center;">\${rep.hasError ? 'نامشخص' : formatFa(rep.itemCount)}</td>
+          <td style="text-align:center;">\${rep.hasError ? 'نامشخص' : formatFa(rep.totalValue) + ' تومان'}</td>
+        </tr>`;
+      })
+      .join('');
+
+    const totalItems = repsWithSummary.reduce(
+      (sum, rep) => sum + (rep.hasError ? 0 : rep.itemCount),
+      0,
+    );
+    const totalValue = repsWithSummary.reduce(
+      (sum, rep) => sum + (rep.hasError ? 0 : rep.totalValue),
+      0,
+    );
+    const activeCount = repsWithSummary.filter(
+      (r) => r.status === 'فعال',
+    ).length;
+    const failedCount = repsWithSummary.filter(
+      (r) => r.hasError,
+    ).length;
+
+    printWindow.document.write(`<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>چاپ لیست انبارهای نمایندگان</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" />
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+body { font-family: 'Vazirmatn', Tahoma, Arial, sans-serif; direction: rtl; padding: 20px; background: #fff; color: #111; }
+.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 3px solid #0f766e; padding-bottom: 15px; }
+.logo { display: flex; align-items: center; gap: 15px; }
+.logo img { max-height: 64px; max-width: 220px; }
+.company-info h1 { font-size: 19px; margin: 0; color: #0f766e; }
+.company-info p { font-size: 12px; color: #555; margin: 2px 0; }
+.report-title { text-align: center; margin: 18px 0 12px; }
+.report-title h2 { font-size: 22px; margin: 0; color: #0f766e; }
+.report-title p { font-size: 12px; color: #666; margin-top: 5px; }
+.info-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 14px 0 20px; }
+.info-card { border: 1px solid #ddd; border-radius: 8px; padding: 12px 14px; background: #f9fafb; }
+.info-card .label { font-size: 11px; color: #6b7280; margin-bottom: 4px; }
+.info-card .value { font-size: 16px; font-weight: bold; color: #111; }
+table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+th, td { border: 1px solid #ddd; padding: 8px 10px; font-size: 12px; text-align: right; }
+th { background: #0f766e !important; color: #fff; font-weight: bold; text-align: center; }
+tr:nth-child(even) td { background: #f9fafb; }
+tfoot td { background: #ecfdf5 !important; font-weight: bold; }
+.summary { display: flex; gap: 16px; margin-top: 22px; justify-content: space-around; }
+.summary-card { border: 1px solid #ddd; border-radius: 10px; padding: 14px 22px; text-align: center; min-width: 150px; background: #f9fafb; }
+.summary-card .label { font-size: 11px; color: #6b7280; }
+.summary-card .value { font-size: 19px; font-weight: bold; margin-top: 5px; color: #0f766e; }
+.footer { margin-top: 36px; text-align: center; font-size: 11px; color: #999; border-top: 1px solid #eee; padding-top: 10px; }
+@media print { @page { size: A4 portrait; margin: 10mm; } body { padding: 0; } }
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="logo">
+    <img src="\${logoUrl}" alt="لوگو" onerror="this.style.display='none'" />
+    <div class="company-info">
+      <h1>بازرگانی مهر امین</h1>
+      <p>سامانه مدیریت نمایندگی و انبار</p>
+      <p>تلفن: ۰۲۸-۳۳۲۳۶۰۷۲</p>
+    </div>
+  </div>
+  <div style="font-size: 12px; text-align: left;">
+    <p><strong>تاریخ چاپ:</strong> \${today}</p>
+    <p><strong>تعداد نمایندگان:</strong> \${formatFa(repsWithSummary.length)}</p>
+  </div>
+</div>
+
+<div class="report-title">
+  <h2>📋 گزارش خلاصهٔ انبارهای نمایندگان</h2>
+  <p>شامل تعداد کالاهای دارای موجودی و ارزش کل موجودی هر نماینده</p>
+</div>
+
+<div class="info-grid">
+  <div class="info-card">
+    <div class="label">نمایندگان فعال</div>
+    <div class="value">\${formatFa(activeCount)}</div>
+  </div>
+  <div class="info-card">
+    <div class="label">مجموع کالاهای دارای موجودی</div>
+    <div class="value">\${formatFa(totalItems)}</div>
+  </div>
+  <div class="info-card">
+    <div class="label">ارزش کل انبارها</div>
+    <div class="value">\${formatFa(totalValue)}<br><span style="font-size:11px;">تومان</span></div>
+  </div>
+  <div class="info-card">
+    <div class="label">انبارهای ناموفق</div>
+    <div class="value" style="color:\${failedCount > 0 ? '#b91c1c' : '#111'};">\${formatFa(failedCount)}</div>
+  </div>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width:5%;">ردیف</th>
+      <th style="width:30%;">نماینده</th>
+      <th style="width:10%;">کد</th>
+      <th style="width:13%;">شهر</th>
+      <th style="width:10%;">وضعیت</th>
+      <th style="width:14%;">کالاهای دارای موجودی</th>
+      <th style="width:18%;">ارزش کل</th>
+    </tr>
+  </thead>
+  <tbody>
+    \${rows}
+  </tbody>
+  <tfoot>
+    <tr>
+      <td colspan="5" style="text-align:left;"><strong>جمع کل:</strong></td>
+      <td style="text-align:center;"><strong>\${formatFa(totalItems)}</strong></td>
+      <td style="text-align:center;"><strong>\${formatFa(totalValue)} تومان</strong></td>
+    </tr>
+  </tfoot>
+</table>
+
+<div class="summary">
+  <div class="summary-card">
+    <div class="label">تعداد کل انبارها</div>
+    <div class="value">\${formatFa(repsWithSummary.length)}</div>
+  </div>
+  <div class="summary-card">
+    <div class="label">مجموع کالاها</div>
+    <div class="value">\${formatFa(totalItems)}</div>
+  </div>
+  <div class="summary-card">
+    <div class="label">ارزش کل انبارها</div>
+    <div class="value">\${formatFa(totalValue)}<br><span style="font-size:11px;">تومان</span></div>
+  </div>
+</div>
+
+<div class="footer">
+  <p>این گزارش به‌صورت خودکار از سامانه مدیریت نمایندگی و انبار تهیه شده است.</p>
+  <p>بازرگانی مهر امین</p>
+</div>
+
+</body>
+</html>`);
+    printWindow.document.close();
+    printWindow.focus();
+    setTimeout(() => {
+      printWindow.print();
+    }, 800);
+  };
+
+  // ===== چاپ برای یک نماینده: چاپ جزئیات انبار همان نماینده =====
+  const handlePrintRepresentativeWarehouse = async (
+    representative: Representative,
+  ) => {
+    const id = String(representative.id);
+
+    // اگر آیتم‌ها رو از قبل داریم، مستقیم چاپ کن
+    let summary = summaries[id];
+    let needFetch = !summary || !Array.isArray(summary.items) || summary.items.length === 0;
+
+    if (needFetch) {
+      try {
+        const token = getToken();
+        const headers: Record<string, string> = {
+          Accept: 'application/json',
+        };
+        if (token) {
+          headers.Authorization = `Bearer \${token}`;
+        }
+
+        const response = await fetch(
+          `\${apiBase}/representatives/\${encodeURIComponent(id)}/warehouse?_=\${Date.now()}`,
+          {
+            method: 'GET',
+            credentials: 'include',
+            cache: 'no-store',
+            headers,
+          },
+        );
+
+        const text = await response.text();
+        let result: WarehouseResponse;
+        try {
+          result = JSON.parse(text);
+        } catch {
+          throw new Error('پاسخ انبار معتبر نیست.');
+        }
+
+        if (!response.ok || !result.success) {
+          throw new Error(
+            result.error || result.message || 'دریافت انبار ناموفق بود.',
+          );
+        }
+
+        const items =
+          (Array.isArray(result.data?.items)
+            ? result.data!.items!
+            : []
+          ).filter((item) => getNumber(item.quantity) > 0);
+
+        summary = {
+          itemCount: items.length,
+          totalValue: items.reduce(
+            (sum, item) =>
+              sum +
+              getNumber(item.quantity) * getNumber(item.unitPrice),
+            0,
+          ),
+          items,
+          updatedAt: result.data?.updatedAt,
+        };
+      } catch (error) {
+        const message =
+          error instanceof Error
+            ? error.message
+            : 'دریافت انبار ناموفق بود.';
+        window.alert(
+          `دریافت جزئیات انبار \${representative.name || ''} ناموفق بود:\n\${message}`,
+        );
+        return;
+      }
+    }
+
+    const printWindow = window.open(
+      '',
+      '_blank',
+      'width=1000,height=720',
+    );
+
+    if (!printWindow) {
+      window.alert(
+        'پنجرهٔ چاپ باز نشد. لطفاً popup blocker را غیرفعال کنید.',
+      );
+      return;
+    }
+
+    const today = getPersianNow();
+    const logoUrl = getCompanyLogoUrl();
+    const items = summary?.items ?? [];
+
+    const itemsHtml = items
+      .map((item, idx) => {
+        const name =
+          String(
+            item.productName ||
+              item.name ||
+              item.title ||
+              'بدون عنوان',
+          );
+        const brand = String(item.brand || '-');
+        const category = String(item.category || '-');
+        const qty = getNumber(item.quantity);
+        const unit = getNumber(item.unitPrice);
+        const total = qty * unit;
+        return `
+        <tr>
+          <td style="text-align:center;">\${idx + 1}</td>
+          <td>\${escapeHtml(name)}</td>
+          <td style="text-align:center;">\${escapeHtml(brand)}</td>
+          <td style="text-align:center;">\${escapeHtml(category)}</td>
+          <td style="text-align:center;">\${formatFa(qty)}</td>
+          <td style="text-align:center;">\${formatFa(unit)} تومان</td>
+          <td style="text-align:center;">\${formatFa(total)} تومان</td>
+        </tr>`;
+      })
+      .join('');
+
+    const totalQty = items.reduce(
+      (sum, item) => sum + getNumber(item.quantity),
+      0,
+    );
+    const totalValue = summary?.totalValue ?? 0;
+    const updatedAtText = summary?.updatedAt
+      ? new Intl.DateTimeFormat('fa-IR-u-ca-persian', {
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+        }).format(new Date(summary.updatedAt))
+      : '-';
+
+    printWindow.document.write(`<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>چاپ انبار \${escapeHtml(representative.name || '')}</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" />
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+body { font-family: 'Vazirmatn', Tahoma, Arial, sans-serif; direction: rtl; padding: 20px; background: #fff; color: #111; }
+.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 3px solid #0f766e; padding-bottom: 15px; }
+.logo { display: flex; align-items: center; gap: 15px; }
+.logo img { max-height: 64px; max-width: 220px; }
+.company-info h1 { font-size: 19px; margin: 0; color: #0f766e; }
+.company-info p { font-size: 12px; color: #555; margin: 2px 0; }
+.report-title { text-align: center; margin: 18px 0 12px; }
+.report-title h2 { font-size: 22px; margin: 0; color: #0f766e; }
+.report-title p { font-size: 12px; color: #666; margin-top: 5px; }
+.info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+.info-card { border: 1px solid #ddd; border-radius: 8px; padding: 12px 15px; }
+.info-card .label { font-size: 11px; color: #6b7280; margin-bottom: 4px; }
+.info-card .value { font-size: 14px; font-weight: bold; }
+table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+th, td { border: 1px solid #ddd; padding: 8px 10px; font-size: 12px; text-align: right; }
+th { background: #0f766e !important; color: #fff; font-weight: bold; text-align: center; }
+tr:nth-child(even) td { background: #f9fafb; }
+tfoot td { background: #ecfdf5 !important; font-weight: bold; }
+.summary { display: flex; gap: 20px; margin-top: 20px; justify-content: space-around; }
+.summary-card { border: 1px solid #ddd; border-radius: 10px; padding: 15px 25px; text-align: center; min-width: 150px; background: #f9fafb; }
+.summary-card .label { font-size: 11px; color: #6b7280; }
+.summary-card .value { font-size: 20px; font-weight: bold; margin-top: 5px; color: #0f766e; }
+.footer { margin-top: 36px; text-align: center; font-size: 11px; color: #999; border-top: 1px solid #eee; padding-top: 10px; }
+@media print { @page { size: A4 portrait; margin: 10mm; } body { padding: 0; } }
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="logo">
+    <img src="\${logoUrl}" alt="لوگو" onerror="this.style.display='none'" />
+    <div class="company-info">
+      <h1>بازرگانی مهر امین</h1>
+      <p>سامانه مدیریت نمایندگی و انبار</p>
+      <p>تلفن: ۰۲۸-۳۳۲۳۶۰۷۲</p>
+    </div>
+  </div>
+  <div style="font-size: 12px; text-align: left;">
+    <p><strong>تاریخ چاپ:</strong> \${today}</p>
+  </div>
+</div>
+
+<div class="report-title">
+  <h2>📋 گزارش انبار نمایندگی</h2>
+  <p>فهرست کامل کالاهای دارای موجودی \${escapeHtml(representative.name || '')}</p>
+</div>
+
+<div class="info-grid">
+  <div class="info-card">
+    <div class="label">نام نمایندگی</div>
+    <div class="value">\${escapeHtml(representative.name || '—')}</div>
+  </div>
+  <div class="info-card">
+    <div class="label">کد نمایندگی</div>
+    <div class="value">\${escapeHtml(representative.code || '—')}</div>
+  </div>
+  <div class="info-card">
+    <div class="label">شهر</div>
+    <div class="value">\${escapeHtml(representative.city || '—')}</div>
+  </div>
+  <div class="info-card">
+    <div class="label">شماره تماس</div>
+    <div class="value" dir="ltr">\${escapeHtml(representative.phone || '—')}</div>
+  </div>
+  <div class="info-card">
+    <div class="label">تعداد ردیف‌های دارای موجودی</div>
+    <div class="value">\${formatFa(summary?.itemCount ?? items.length)}</div>
+  </div>
+  <div class="info-card">
+    <div class="label">آخرین بروزرسانی</div>
+    <div class="value">\${updatedAtText}</div>
+  </div>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width:5%;">ردیف</th>
+      <th style="width:34%;">عنوان</th>
+      <th style="width:13%;">برند</th>
+      <th style="width:14%;">دسته‌بندی</th>
+      <th style="width:10%;">تعداد</th>
+      <th style="width:12%;">قیمت</th>
+      <th style="width:12%;">مجموع</th>
+    </tr>
+  </thead>
+  <tbody>
+    \${itemsHtml || '<tr><td colspan="7" style="text-align:center;color:#9ca3af;padding:30px;">هیچ کالای دارای موجودی ثبت نشده است.</td></tr>'}
+  </tbody>
+  <tfoot>
+    <tr>
+      <td colspan="4" style="text-align:left;"><strong>جمع کل:</strong></td>
+      <td style="text-align:center;"><strong>\${formatFa(totalQty)}</strong></td>
+      <td></td>
+      <td style="text-align:center;"><strong>\${formatFa(totalValue)} تومان</strong></td>
+    </tr>
+  </tfoot>
+</table>
+
+<div class="summary">
+  <div class="summary-card">
+    <div class="label">تعداد انواع کالا</div>
+    <div class="value">\${formatFa(summary?.itemCount ?? items.length)}</div>
+  </div>
+  <div class="summary-card">
+    <div class="label">مجموع قطعات</div>
+    <div class="value">\${formatFa(totalQty)}</div>
+  </div>
+  <div class="summary-card">
+    <div class="label">ارزش کل انبار</div>
+    <div class="value">\${formatFa(totalValue)}<br><span style="font-size:12px;">تومان</span></div>
+  </div>
+</div>
+
+<div class="footer">
+  <p>این گزارش به‌صورت خودکار از سامانه مدیریت نمایندگی و انبار تهیه شده است.</p>
+  <p>بازرگانی مهر امین</p>
+</div>
+
+</body>
+</html>`);
+    printWindow.document.close();
+    printWindow.focus();
+    setTimeout(() => {
+      printWindow.print();
+    }, 800);
+  };
+
   useEffect(() => {
     const controller = new AbortController();
 
@@ -285,6 +806,9 @@ const Warehouse: React.FC<WarehouseProps> = ({
                     getNumber(item.unitPrice),
                 0,
               ),
+
+              items: stockedItems,
+              updatedAt: result.data?.updatedAt,
             };
           } catch (error) {
             if (controller.signal.aborted) {
@@ -463,17 +987,36 @@ const Warehouse: React.FC<WarehouseProps> = ({
     )} تومان`;
   };
 
-  const renderOpenButton = (id: string) => (
-    <button
-      type="button"
-      onClick={() =>
-        onOpenRepresentativeWarehouse(id)
-      }
-      className="inline-flex min-h-10 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 px-4 py-2 text-xs font-black text-white hover:from-cyan-700 hover:to-blue-700"
-    >
-      <Store className="h-4 w-4" />
-      ورود به انبار
-    </button>
+  const renderOpenButton = (
+    id: string,
+    representative?: Representative,
+  ) => (
+    <div className="flex flex-wrap items-center gap-2">
+      <button
+        type="button"
+        onClick={() =>
+          onOpenRepresentativeWarehouse(id)
+        }
+        className="inline-flex min-h-10 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 px-4 py-2 text-xs font-black text-white hover:from-cyan-700 hover:to-blue-700"
+      >
+        <Store className="h-4 w-4" />
+        ورود به انبار
+      </button>
+
+      {representative ? (
+        <button
+          type="button"
+          onClick={() =>
+            handlePrintRepresentativeWarehouse(representative)
+          }
+          className="inline-flex min-h-10 items-center justify-center gap-1 rounded-xl border border-cyan-600 px-3 py-2 text-xs font-black text-cyan-700 hover:bg-cyan-50 dark:border-cyan-400 dark:text-cyan-300 dark:hover:bg-cyan-900/20"
+          title="چاپ لیست کالاهای این انبار"
+        >
+          <Printer className="h-4 w-4" />
+          چاپ انبار
+        </button>
+      ) : null}
+    </div>
   );
 
   const statText = (value: number): string => {
@@ -513,20 +1056,34 @@ const Warehouse: React.FC<WarehouseProps> = ({
             </div>
           </div>
 
-          <button
-            type="button"
-            onClick={refresh}
-            disabled={loading}
-            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-gray-300 px-4 py-2 text-xs font-bold text-gray-700 disabled:opacity-50 dark:border-gray-600 dark:text-gray-200"
-          >
-            {loading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <RefreshCw className="h-4 w-4" />
-            )}
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={refresh}
+              disabled={loading}
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-gray-300 px-4 py-2 text-xs font-bold text-gray-700 disabled:opacity-50 dark:border-gray-600 dark:text-gray-200"
+            >
+              {loading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <RefreshCw className="h-4 w-4" />
+              )}
 
-            بروزرسانی موجودی
-          </button>
+              بروزرسانی موجودی
+            </button>
+
+            <button
+              type="button"
+              onClick={handlePrintAllWarehouses}
+              disabled={loading || !filteredRepresentatives.length}
+              className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 px-4 py-2 text-xs font-black text-white shadow-sm hover:from-cyan-700 hover:to-blue-700 disabled:opacity-50"
+              title="چاپ لیست خلاصهٔ همهٔ انبارها"
+            >
+              <Printer className="h-4 w-4" />
+
+              چاپ کلی
+            </button>
+          </div>
         </div>
       </section>
 
@@ -733,7 +1290,7 @@ const Warehouse: React.FC<WarehouseProps> = ({
                   </div>
 
                   <div className="mt-4">
-                    {renderOpenButton(id)}
+                    {renderOpenButton(id, representative)}
                   </div>
                 </article>
               );
@@ -820,7 +1377,7 @@ const Warehouse: React.FC<WarehouseProps> = ({
                       </td>
 
                       <td className="p-3">
-                        {renderOpenButton(id)}
+                        {renderOpenButton(id, representative)}
                       </td>
                     </tr>
                   );

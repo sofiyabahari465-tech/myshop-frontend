@@ -1005,8 +1005,10 @@ const RepresentativeDashboard: React.FC<Props> = ({
     'rar',
   ];
 
-  const MAX_UPLOAD_SIZE = 10 * 1024 * 1024; // 10 MB
-  const MAX_UPLOAD_FILES = 10;
+  // محدودیتی روی تعداد فایل‌ها و حجم آن‌ها اعمال نمی‌شود.
+  // کاربر می‌تواند هر تعداد عکس یا فایل که خواست آپلود کند.
+  const MAX_UPLOAD_SIZE = Number.MAX_SAFE_INTEGER; // بدون محدودیت حجم
+  const MAX_UPLOAD_FILES = Number.MAX_SAFE_INTEGER; // بدون محدودیت تعداد
 
   const getFileExtension = (
     filename: string,
@@ -1028,9 +1030,8 @@ const RepresentativeDashboard: React.FC<Props> = ({
   const isFileSizeAllowed = (
     file: File,
   ): boolean => {
-    return (
-      file.size > 0 && file.size <= MAX_UPLOAD_SIZE
-    );
+    // بدون محدودیت حجم، فقط فایل خالی رد می‌شود.
+    return file.size > 0;
   };
 
   const formatFileSizeLabel = (
@@ -1089,7 +1090,7 @@ const RepresentativeDashboard: React.FC<Props> = ({
 
       if (!isFileSizeAllowed(file)) {
         errors.push(
-          `حجم فایل "${file.name}" بیشتر از ۱۰ مگابایت است.`,
+          `فایل "${file.name}" خالی است.`,
         );
         return;
       }
@@ -1097,21 +1098,10 @@ const RepresentativeDashboard: React.FC<Props> = ({
       validFiles.push(file);
     });
 
-    if (
-      selectedFiles.length + validFiles.length >
-      MAX_UPLOAD_FILES
-    ) {
-      errors.push(
-        `حداکثر ${MAX_UPLOAD_FILES} فایل می‌توانید آپلود کنید.`,
-      );
-    }
-
+    // محدودیتی روی تعداد فایل‌ها اعمال نمی‌شود؛ همهٔ فایل‌های معتبر اضافه می‌شوند.
     setSelectedFiles((current) => [
       ...current,
-      ...validFiles.slice(
-        0,
-        MAX_UPLOAD_FILES - current.length,
-      ),
+      ...validFiles,
     ]);
 
     setUploadError(errors.join(' '));
@@ -2404,7 +2394,7 @@ const RepresentativeDashboard: React.FC<Props> = ({
                     </p>
 
                     <p className="mt-1 text-xs text-slate-500 dark:text-gray-400">
-                      حداکثر ۱۰ فایل، هر کدام تا ۱۰ مگابایت
+                      بدون محدودیت تعداد و حجم - هر تعداد فایل که خواستید می‌توانید آپلود کنید
                     </p>
 
                     <p className="mt-2 text-[11px] text-slate-400 dark:text-gray-500">
